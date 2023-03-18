@@ -8,6 +8,10 @@
     <a href="https://black.readthedocs.io/en/stable/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
+<video width="720"  controls>
+  <source src="./media/videos/1080p60/CustomSCene.mp4" type="video/mp4">
+</video>
+
 Manim extension with custom components, layouts and slide templates aimed to ease the development of live presentations.
 
 
