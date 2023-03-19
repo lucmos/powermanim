@@ -8,7 +8,6 @@ from manim import *
 
 from powermanim.showcase.showcasescene import QUALITY, QUALITY2RES, ShowcaseMeta
 
-# print(Path.cwd())
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 ANIMATIONS_CONTENTS_PATH = PROJECT_ROOT / "docs" / "content" / "animations"
 
