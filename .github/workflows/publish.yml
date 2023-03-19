@@ -140,12 +140,12 @@ jobs:
           pre-commit install
           pre-commit run -v --all-files --show-diff-on-failure
 
-      - name: Test with pytest
+      - name: Test and generate anim
         shell: bash -l {0}
         run: |
           pytest -v
 
-      - name: Test with pytest
+      - name: Build website pages
         shell: bash -l {0}
         run: |
           build_anims
