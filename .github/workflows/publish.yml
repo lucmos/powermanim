@@ -134,12 +134,12 @@ jobs:
         run: |
           pytest -v
 
-      - name: Build docs website
-        shell: bash -l {0}
-        run: |
-          git config user.name ci-bot
-          git config user.email ci-bot@ci.com
-          mike deploy --rebase --push --update-aliases ${RELEASE_TAG_VERSION} latest
+      # - name: Build docs website
+      #   shell: bash -l {0}
+      #   run: |
+      #     git config user.name ci-bot
+      #     git config user.email ci-bot@ci.com
+      #     mike deploy --rebase --push --update-aliases ${RELEASE_TAG_VERSION} latest
 
         # Uncomment to publish on PyPI on release
 #      - name: Build SDist and wheel
