@@ -42,6 +42,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Setup TeX Live
+        uses: teatimeguest/setup-texlive-action@v2
+        with:
+          packages: >-
+            scheme-basic
+            cleveref
+            hyperref
+
       - name: Parametrize conda env name
         run: echo "PY_CONDA_ENV_NAME=${{ env.CONDA_ENV_NAME }}-${{ matrix.python-version }}" >> $GITHUB_ENV
       - name: echo conda env name
