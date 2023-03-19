@@ -17,4 +17,6 @@ feature:
     icon_pack: fas
     name: Personal Notebook
     description: For yourself
+
+active: false
 ---
