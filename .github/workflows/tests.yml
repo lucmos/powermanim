@@ -12,9 +12,6 @@ on:
       - reopened
       - synchronize
 
-permissions:
-  contents: write
-
 env:
   CACHE_NUMBER: 2  # increase to reset cache manually
   CONDA_ENV_FILE: './env.yaml'
@@ -141,29 +138,3 @@ jobs:
         shell: bash -l {0}
         run: |
           pytest -v
-
-      - name: Test with pytest
-        shell: bash -l {0}
-        run: |
-          build_anims
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: 'latest'
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        # If you're changing the branch from main,
-        # also change the `main` in `refs/heads/main`
-        # below accordingly.
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/public
-#
-#
