@@ -1,0 +1,40 @@
+.btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+  opacity: 0.8;
+  color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(150, 150, 150, 0.25);
+  border-color: white;
+}
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+  opacity: 0.8;
+  color: rgba(0, 0, 0, 1);
+}
+
+
+.dark .btn-primary {
+  opacity: 0.8;
+  color: white;
+  background-color: rgba(150, 150, 150, 0.25);
+  border-color: black;
+}
+
+.dark .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+  opacity: 0.8;
+  color: white;
+}
+
+.dark .card {
+  // opacity: 0.8;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.animation-title {
+  // opacity: 0.8;
+  color: rgba(0, 0, 0, .9);
+  text-align: center;
+}
+
+.dark .animation-title {
+  // opacity: 0.8;
+  color: white;
+  text-align: center;
+}
