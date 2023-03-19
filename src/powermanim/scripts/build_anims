@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+import inspect
+from collections import namedtuple
+from pathlib import Path
+
+from manim import *
+
+from powermanim.showcase.showcasescene import QUALITY, QUALITY2RES, ShowcaseMeta
+
+# print(Path.cwd())
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+ANIMATIONS_CONTENTS_PATH = PROJECT_ROOT / "docs" / "content" / "animations"
+
+GITHUB_URL_TEMPLATE = "https://github.com/lucmos/powermanim/blob/main/{path}"
+ANIMATION_LOCAL_PATH_TEMPLATE = f"uploads/media/videos/{QUALITY2RES[QUALITY]}/{{scenename}}.mp4"
+
+PAGE_TEMPLATE = """\
+---
+title: {showcased_name}
+
+external_link: {github_url}
+
+animation: {animation_path}
+
+publishDate: "2010-01-01T00:00:00Z"
+
+categories: ["{category}"]
+
+tags:
+  - {tag}
+
+featured: false
+---
+"""
+
+
+Showcase = namedtuple("Showcase", ["showcased_name", "github_url", "animation_path", "category", "tag"])
+
+
+def parse_scene(scene: Scene) -> Showcase:
+    showcase_scene_name = scene.__name__
+
+    showcased_class = scene.showcasing()
+    showcased_name = showcased_class.__name__
+    showcased_file = Path(inspect.getfile(showcased_class)).relative_to(PROJECT_ROOT)
+
+    github_url = GITHUB_URL_TEMPLATE.format(path=showcased_file)
+    animation_path = ANIMATION_LOCAL_PATH_TEMPLATE.format(scenename=showcase_scene_name)
+
+    category = showcased_class.__module__.split(".")[1]
+
+    return Showcase(
+        showcased_name=showcased_name,
+        github_url=github_url,
+        animation_path=animation_path,
+        category=category,
+        tag=category,
+    )
+
+
+def assemble_page(showcase: Showcase) -> str:
+    return PAGE_TEMPLATE.format(
+        showcased_name=showcase.showcased_name,
+        github_url=showcase.github_url,
+        animation_path=showcase.animation_path,
+        category=showcase.category,
+        tag=showcase.tag,
+    )
+
+
+def write_page(showcase: Showcase):
+    page = assemble_page(showcase)
+    folder_name = ANIMATIONS_CONTENTS_PATH / showcase.showcased_name.lower()
+    folder_name.mkdir(parents=True, exist_ok=False)
+    (folder_name / "index.md").write_text(page)
+
+
+for scene in ShowcaseMeta.showcase_scenes:
+    showcase = parse_scene(scene)
+    write_page(showcase)
