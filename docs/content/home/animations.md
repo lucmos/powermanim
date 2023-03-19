@@ -35,11 +35,11 @@ content:
   filter_default: 3
   filter_button:
     - name: Components
-      tag: component
+      tag: components
     - name: Layouts
-      tag: tag
+      tag: layouts
     - name: Templates
-      tag: template
+      tag: templates
     - name: All
       tag: '*'
 

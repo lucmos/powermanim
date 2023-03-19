@@ -32,7 +32,7 @@
     <!-- <p>{{ . }}</p> -->
     <h4><a href="{{ $link }}" class='animation-title' {{ $target | safeHTMLAttr }}>{{ $item.Title | markdownify | emojify }}</a></h4>
 
-    <video width="720"  loop autoplay >
+    <video width="480"  controls  autoplay loop  >
       <source src="{{ $item.Params.animation }}" type="video/mp4">
     </video>
 
