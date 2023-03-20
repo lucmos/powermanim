@@ -8,7 +8,7 @@ from manim import *
 
 from powermanim.showcase.showcasescene import QUALITY, QUALITY2RES, ShowcaseMeta
 
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+PROJECT_ROOT = Path(inspect.getfile(ShowcaseMeta)).parent.parent.parent.parent
 ANIMATIONS_CONTENTS_PATH = PROJECT_ROOT / "docs" / "content" / "animations"
 
 GITHUB_URL_TEMPLATE = "https://github.com/lucmos/powermanim/blob/main/{path}"
