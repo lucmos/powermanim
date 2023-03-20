@@ -71,7 +71,7 @@ def assemble_page(showcase: Showcase) -> str:
 def write_page(showcase: Showcase):
     page = assemble_page(showcase)
     folder_name = ANIMATIONS_CONTENTS_PATH / showcase.showcased_name.lower()
-    folder_name.mkdir(parents=True, exist_ok=False)
+    folder_name.mkdir(parents=True, exist_ok=True)
     (folder_name / "index.md").write_text(page)
 
 
