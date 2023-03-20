@@ -4,7 +4,7 @@
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
 
 title: 'powermanim' # Website name
-baseURL: 'https://powermanim.netlify.app/' # Website URL
+baseURL: 'https://lucmos.github.io/powermanim/' # Website URL
 
 ############################
 ## PAGE OPTIONS
