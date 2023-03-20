@@ -4,10 +4,10 @@ from typing import Sequence, Type
 from manim import *
 
 WOWCHEMY_FOLDER = "docs/static/uploads/media"
-QUALITY = "high_quality"
+QUALITY = "medium_quality"
 QUALITY2RES = {
     "high_quality": "1080p60",
-    "medium_quality": "720p60",
+    "medium_quality": "720p30",
     "low_quality": "480p15",
 }
 
