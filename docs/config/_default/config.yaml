@@ -4,7 +4,10 @@
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
 
 title: 'powermanim' # Website name
-baseURL: 'https://lucmos.github.io/' # Website URL
+baseURL: 'https://lucmos.github.io/powermanim/' # Website URL
+
+relativeURLS: true
+canonifyurls: true
 
 ############################
 ## PAGE OPTIONS
