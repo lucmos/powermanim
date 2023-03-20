@@ -9,6 +9,18 @@ on:
     types:
       - created
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 
 env:
   CACHE_NUMBER: 0  # increase to reset cache manually
@@ -26,11 +38,10 @@ jobs:
           - os: ubuntu-20.04
             label: linux-64
             prefix: /usr/share/miniconda3/envs/
-
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     name: ${{ matrix.label }}-py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    permissions:
-      contents: write
     steps:
       - name: Setup TeX Live
         uses: teatimeguest/setup-texlive-action@v2
@@ -88,7 +99,7 @@ jobs:
         run: |
           echo "${RELEASE_TAG_VERSION}"
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -191,15 +202,14 @@ jobs:
         working-directory: ./docs
         run: hugo --minify
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        # If you're changing the branch from main,
-        # also change the `main` in `refs/heads/main`
-        # below accordingly.
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/public
+          target_branch: gh-pages
+          build_dir: docs/public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         # Uncomment to publish on PyPI on release
 #      - name: Build SDist and wheel
