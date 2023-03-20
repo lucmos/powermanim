@@ -1,5 +1,5 @@
 import abc
-from typing import Sequence, Type
+from typing import Any, Sequence, Type
 
 from manim import *
 
@@ -25,5 +25,5 @@ class ShowcaseMeta(abc.ABCMeta):
 class ShowcaseScene(Scene, metaclass=ShowcaseMeta):
     @staticmethod
     @abc.abstractmethod
-    def showcasing(self) -> Type[Scene]:
+    def showcasing(self) -> Type[Any]:
         pass
