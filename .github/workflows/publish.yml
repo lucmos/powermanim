@@ -23,7 +23,7 @@ concurrency:
 
 
 env:
-  CACHE_NUMBER: 0  # increase to reset cache manually
+  CACHE_NUMBER: 1  # increase to reset cache manually
   CONDA_ENV_FILE: './env.yaml'
   CONDA_ENV_NAME: 'powermanim'
 
