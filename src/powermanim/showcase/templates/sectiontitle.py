@@ -1,5 +1,3 @@
-from manim import *
-
 from powermanim.showcase.showcasescene import ShowcaseScene
 from powermanim.templates.sectiontitle import SectionTitle
 
