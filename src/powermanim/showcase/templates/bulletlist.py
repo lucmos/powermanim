@@ -23,9 +23,12 @@ class BulletListShowcase(ShowcaseScene):
             .arrange(DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF * 1.5)
             .to_edge(LEFT, buff=MED_LARGE_BUFF * 1.5)
         )
-        grouped_rows.set_opacity(0.5).scale(0.75)
+        grouped_rows.set_opacity(0.5).scale(0.8)
 
-        bullets = BulletList(*rows)
+        bullets = BulletList(
+            *rows,
+            scale_active=1.2,
+        )
         self.add(bullets)
 
         bullets.also_next(self)
