@@ -8,7 +8,7 @@ class VGroupHighlight(VGroup):
         self,
         *args: VMobject,
         anim_run_time: float = 1.0,
-        anim_lag_ratio: float = 1.0,
+        anim_lag_ratio: float = 0,
         active_opacity: float = 1.0,
         scale_active: float = 1.0,
         scale_about_point=None,
@@ -60,15 +60,20 @@ class VGroupHighlight(VGroup):
 
         for to_highlight in indices:
             self.submobjects[to_highlight].target = self.submobjects[to_highlight].saved_state.copy()
-            self.submobjects[to_highlight].target.scale(self.scale_active)
+            self.submobjects[to_highlight].target.scale(
+                self.scale_active,
+                about_point=self.scale_about_point,
+                about_edge=self.scale_about_edge,
+            )
             self.submobjects[to_highlight].target.set_opacity(self.active_opacity)
             anims.append(MoveToTarget(self.submobjects[to_highlight]))
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
-                anims.append(
-                    self.submobjects[previously_active_idx].animate.restore(),
-                )
+                if previously_active_idx not in indices:
+                    anims.append(
+                        self.submobjects[previously_active_idx].animate.restore(),
+                    )
 
         self.previously_active_idxs = indices
 
