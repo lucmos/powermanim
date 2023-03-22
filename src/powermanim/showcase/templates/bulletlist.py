@@ -18,12 +18,7 @@ class BulletListShowcase(ShowcaseScene):
                 "Fourth row",
             ]
         ]
-        grouped_rows = (
-            VGroup(*rows)
-            .arrange(DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF * 1.5)
-            .to_edge(LEFT, buff=MED_LARGE_BUFF * 1.5)
-        )
-        grouped_rows.set_opacity(0.5).scale(0.8)
+        VGroup(*rows).set_opacity(0.5).scale(0.8)
 
         bullets = BulletList(
             *rows,
