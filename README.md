@@ -3,10 +3,11 @@
 <p align="center">
     <a href="https://pypi.org/project/powermanim/"><img alt="PyPi" src=https://img.shields.io/pypi/v/powermanim></a>
     <a href="https://pypi.org/project/powermanim/"><img alt="PyPi" src=https://img.shields.io/pypi/dm/powermanim></a>
-    <a href="https://github.com/lucmos/powermanim/actions/workflows/publish.yml"><img alt="CI" src=https://github.com/lucmos/powermanim/actions/workflows/publish.yml/badge.svg?branch=main></a>
+    <a href="https://github.com/lucmos/powermanim/actions/workflows/publish.yml"><img alt="CI" src=https://github.com/lucmos/powermanim/actions/workflows/publish.yml/badge.svg?event=release></a>
     <a href="https://lucmos.github.io/powermanim"><img alt="Docs" src=https://img.shields.io/github/deployments/lucmos/powermanim/github-pages?label=docs></a>
     <a href="https://black.readthedocs.io/en/stable/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
+
 
 Manim extension with custom components, layouts and slide templates aimed to ease the development of live presentations.
 
