@@ -10,13 +10,13 @@ class ChartBarsShowcase(ShowcaseScene):
         return ChartBars
 
     def construct(self):
-        axes = Axes(x_range=[0, 5], y_range=[0, 1.5], x_length=6, y_length=3)
-        axes.add_coordinates(None, [0, 1], None)
+        axes = Axes(x_range=[0, 6], y_range=[0, 1.5], x_length=7, y_length=4)
         size = 5
         changes = 3
 
         dist1 = softmax(np.random.randn(size))
-        bars = ChartBars(axes, dist1, xs=list(range(size)), fill_color=PURE_BLUE)
+
+        bars = ChartBars(axes, dist1, xs=list(range(size)), fill_color=RED, stroke_width=0.1)
         self.add(axes, bars)
         for i in range(changes):
             dist2 = softmax(np.random.randn(size))
