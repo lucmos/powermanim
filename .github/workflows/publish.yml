@@ -4,9 +4,6 @@ on:
   release:
     types:
       - created
-  push:
-    branches:
-      - main
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -180,6 +177,9 @@ jobs:
         # Uncomment to publish on PyPI on release
       - name: Check working directory status
         run: git status
+
+      - name: Restore working directory (env.yaml Python version)
+        run: git checkout .
 
       - name: Build SDist and wheel
         run: pipx run build
