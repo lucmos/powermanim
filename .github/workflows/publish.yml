@@ -1,10 +1,6 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - main
-
   release:
     types:
       - created
@@ -179,16 +175,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         # Uncomment to publish on PyPI on release
-#      - name: Build SDist and wheel
-#        run: pipx run build
-#
-#      - name: Check metadata
-#        run: pipx run twine check dist/*
-#
-#      - name: Publish distribution 📦 to PyPI
-#        uses: pypa/gh-action-pypi-publish@release/v1
-#        with:
-#          user: __token__
-#          password: ${{ secrets.PYPI_API_TOKEN }}
-#
-#
+      - name: Build SDist and wheel
+        run: pipx run build
+
+      - name: Check metadata
+        run: pipx run twine check dist/*
+
+      - name: Publish distribution 📦 to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
