@@ -36,7 +36,7 @@ header:
     show_logo: true
     show_language: false
     show_day_night: true
-    show_search: true
+    show_search: false
     highlight_active_link: true
 
 footer:
@@ -65,8 +65,8 @@ features:
   privacy_pack:
     enable: false
   repository:
-    url: 'https://github.com/wowchemy/hugo-documentation-theme'
-    content_dir: content
+    url: 'https://github.com/lucmos/powermanim'
+    content_dir: docs/content
     branch: main
   feedback:
     responses:
