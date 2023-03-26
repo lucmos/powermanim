@@ -106,9 +106,6 @@ class ArrangedBullets(VGroup):
         if (None in groups) and len(set(groups)) != 1:
             raise ValueError("The groups must be specified for all or no bullets at all.")
 
-        if None in groups:
-            groups = list(range(len(bullet_rows)))
-
         group2bullet = defaultdict(list)
         for i, row in enumerate(bullet_rows):
             group = row.group
