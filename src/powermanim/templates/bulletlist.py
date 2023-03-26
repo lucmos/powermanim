@@ -3,7 +3,7 @@ import typing as T
 from manim import *
 
 from powermanim.components.vgrouphighlight import VGroupHighlight
-from powermanim.layouts.arrangedbulletlist import ArrangedBulletList
+from powermanim.layouts.arrangedbullets import ArrangedBullets
 
 
 class BulletList(VGroup):
@@ -11,8 +11,9 @@ class BulletList(VGroup):
         self,
         *rows: T.Union[Tex, Text],
         line_spacing: float = MED_LARGE_BUFF * 1.5,
+        indent_buff: float = MED_LARGE_BUFF * 1.5,
         left_buff: float = MED_LARGE_BUFF * 2,
-        shift: float = 0.0,
+        global_shift: float = 0.0,
         inactive_opacity: float = 0.5,
         active_opacity: float = 1.0,
         scale_active: float = 1.0,
@@ -22,21 +23,23 @@ class BulletList(VGroup):
         Args:
             rows: A list of items to be displayed.
             line_spacing: The spacing between the rows.
+            indent_buff: The spacing between the bullet and the text.
             left_buff: The spacing between the left edge of the rows and the left edge of the screen.
-            shift: The shift to apply to the rows.
+            global_shift: The global_shift to apply to the rows.
             inactive_opacity: The opacity of the inactive items.
             active_opacity: The opacity of the active items.
             scale_active: The scale of the active items.
         """
-        ArrangedBulletList(
+        self.arranged_list = ArrangedBullets(
             *rows,
             line_spacing=line_spacing,
+            indent_buff=indent_buff,
             left_buff=left_buff,
-            shift=shift,
+            global_shift=global_shift,
         ).set_opacity(inactive_opacity)
 
         self.rows = VGroupHighlight(
-            *rows,
+            *self.arranged_list,
             active_opacity=active_opacity,
             scale_active=scale_active,
             scale_about_edge=LEFT,
@@ -49,10 +52,16 @@ class BulletList(VGroup):
         """Highlights also the next item in the list."""
         self.highlighted += 1
 
+        if self.highlighted > self.arranged_list.ngroups:
+            raise StopIteration("No more elements to highlight.")
+
         self.rows.highlight(scene=scene, indices=list(range(self.highlighted)))
 
     def only_next(self, scene: Scene) -> None:
         """Highlights only the next item in the list."""
+        if self.highlighted > self.arranged_list.ngroups:
+            raise StopIteration("No more elements to highlight.")
+
         self.rows.highlight(scene=scene, indices=self.highlighted)
         self.highlighted += 1
 
