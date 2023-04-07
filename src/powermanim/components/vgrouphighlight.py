@@ -41,7 +41,7 @@ class VGroupHighlight(VGroup):
 
         self.previously_active_idxs = []
 
-    def highlight(self, scene: Scene, indices: T.Union[int, T.Sequence[int]]) -> None:
+    def highlight(self, indices: T.Union[int, T.Sequence[int]]) -> AnimationGroup:
         """Highlights the submobjects in the given indices in the scene.
 
         Args:
@@ -77,7 +77,4 @@ class VGroupHighlight(VGroup):
 
         self.previously_active_idxs = indices
 
-        scene.play(
-            AnimationGroup(*anims, lag_ratio=self.anim_lag_ratio),
-            run_time=self.anim_run_time,
-        )
+        return AnimationGroup(*anims, lag_ratio=self.anim_lag_ratio)
