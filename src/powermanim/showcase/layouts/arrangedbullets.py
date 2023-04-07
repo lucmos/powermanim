@@ -10,12 +10,12 @@ class ArrangedBulletsShowcase(ShowcaseScene):
 
     def construct(self):
         rows = [
-            Bullet(Text("First row")),
-            Bullet(Text("Second row")),
-            Bullet(Text("Elements:")),
-            Bullet(Text("First element"), level=1, symbol="(1)"),
-            Bullet(Text("Second element"), level=1, symbol="(2)"),
-            Bullet(Text("Third element"), level=1, symbol="(3)"),
+            Bullet("First row"),
+            Bullet("Second row"),
+            Bullet("Elements:"),
+            Bullet("First element", level=1, symbol="(1)"),
+            Bullet("Second element", level=1, symbol="(2)"),
+            Bullet("Third element", level=1, symbol="(3)"),
         ]
         g_rows = VGroup(*rows).set_opacity(0.25).scale(0.9)
         g_rows.target = ArrangedBullets(
