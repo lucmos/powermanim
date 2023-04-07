@@ -12,6 +12,7 @@ class MathBullet(MathTex):
         group: T.Optional[int] = None,
         adjustment: float = 0.0,
         symbol: T.Optional[str] = r"\bullet",
+        autoplace: bool = True,
         **kwargs,
     ):
         """A class to represent a bullet point.
@@ -22,13 +23,13 @@ class MathBullet(MathTex):
             group: The group the bullet point belongs to, controls the animations.
             adjustment: The adjustment of the bullet.
             symbol: The symbol to be displayed as the bullet.
-            symbol_buff: The spacing between the bullet and the text.
-            text_components_buff: The spacing between the text components.
+            autoplace: Whether to automatically place the bullet point.
         """
         self.level = level
         self.adjustment = adjustment
         self.group = group
         self.symbol = symbol
+        self.autoplace = autoplace
 
         first_text, *rest_text = text
         if symbol is not None:
@@ -95,6 +96,18 @@ class Bullet(MathBullet):
 
 
 class ArrangedBullets(VGroup):
+    def arrage_rows(self, rows: T.Iterable[T.Union[MathBullet, Bullet, MathTex, Tex, Text]]):
+        bullet_rows: T.Iterable[MathBullet] = (
+            VGroup(*rows)
+            .arrange(DOWN, aligned_edge=LEFT, buff=self.line_spacing)
+            .to_edge(LEFT, buff=self.left_buff)
+            .shift(self.global_shift)
+        )
+
+        for row in bullet_rows:
+            row.indent(indent_buff=self.indent_buff)
+            row.adjust()
+
     def __init__(
         self,
         *rows: T.Union[MathBullet, Bullet, MathTex, Tex, Text],
@@ -118,25 +131,17 @@ class ArrangedBullets(VGroup):
         self.global_shift = global_shift
 
         rows = [(row if isinstance(row, MathBullet) else Bullet(row)) for row in rows]
-        bullet_rows: T.Iterable[MathBullet] = (
-            VGroup(*rows)
-            .arrange(DOWN, aligned_edge=LEFT, buff=line_spacing)
-            .to_edge(LEFT, buff=left_buff)
-            .shift(global_shift)
-        )
 
-        for row in bullet_rows:
-            row.indent(indent_buff=indent_buff)
-            row.adjust()
+        self.arrage_rows((row for row in rows if row.autoplace))
 
-        groups = [row.group for row in bullet_rows]
+        groups = [row.group for row in rows]
 
         # If there is a None and aso something else
         if (None in groups) and len(set(groups)) != 1:
             raise ValueError("The groups must be specified for all or no bullets at all.")
 
         group2bullet = defaultdict(list)
-        for i, row in enumerate(bullet_rows):
+        for i, row in enumerate(rows):
             group = row.group
             if group is None:
                 group = i
