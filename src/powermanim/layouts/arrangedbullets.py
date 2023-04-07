@@ -4,16 +4,15 @@ from collections import defaultdict
 from manim import *
 
 
-class Bullet(VGroup):
+class MathBullet(MathTex):
     def __init__(
         self,
-        *text: T.Union[Tex, Text, MathTex],
+        *text: str,
         level: int = 0,
         group: T.Optional[int] = None,
         adjustment: float = 0.0,
-        symbol: T.Optional[str] = r"$\bullet$",
-        buff: float = DEFAULT_MOBJECT_TO_MOBJECT_BUFFER,
-        text_components_buff: float = DEFAULT_MOBJECT_TO_MOBJECT_BUFFER,
+        symbol: T.Optional[str] = r"\bullet",
+        **kwargs,
     ):
         """A class to represent a bullet point.
 
@@ -23,20 +22,19 @@ class Bullet(VGroup):
             group: The group the bullet point belongs to, controls the animations.
             adjustment: The adjustment of the bullet.
             symbol: The symbol to be displayed as the bullet.
-            buff: The spacing between the bullet and the text.
+            symbol_buff: The spacing between the bullet and the text.
             text_components_buff: The spacing between the text components.
         """
         self.level = level
         self.adjustment = adjustment
         self.group = group
+        self.symbol = symbol
 
-        self.text = VGroup(*text).arrange(RIGHT, buff=text_components_buff)
-        self.bullet = symbol
-
+        first_text, *rest_text = text
         if symbol is not None:
-            self.bullet = Tex(symbol)
-            self.bullet.next_to(self.text, LEFT, buff=buff)
-        super().__init__(VGroup(self.bullet, self.text) if self.bullet is not None else self.text)
+            first_text = rf"{symbol}~{first_text}"
+
+        super().__init__(first_text, *rest_text, **kwargs)
 
     def indent(self, indent_buff: float = MED_LARGE_BUFF * 1.5):
         """Indent the bullet point.
@@ -65,10 +63,41 @@ class Bullet(VGroup):
         self.shift(self.adjustment)
 
 
+class Bullet(MathBullet):
+    def __init__(
+        self,
+        *text: str,
+        level: int = 0,
+        group: T.Optional[int] = None,
+        adjustment: float = 0.0,
+        symbol: T.Optional[str] = r"$\bullet$",
+        force_inline: bool = False,
+        arg_separator="",
+        tex_environment="center",
+        **kwargs,
+    ):
+        first_text, *rest_text = text
+        if force_inline:
+            first_text = r"\mbox{" + first_text
+            rest_text = *rest_text, r"}"
+
+        super().__init__(
+            first_text,
+            *rest_text,
+            level=level,
+            group=group,
+            adjustment=adjustment,
+            symbol=symbol,
+            arg_separator=arg_separator,
+            tex_environment=tex_environment,
+            **kwargs,
+        )
+
+
 class ArrangedBullets(VGroup):
     def __init__(
         self,
-        *rows: T.Union[Bullet, MathTex, Tex, Text],
+        *rows: T.Union[MathBullet, Bullet, MathTex, Tex, Text],
         line_spacing: float = MED_LARGE_BUFF * 1.5,
         indent_buff: float = MED_LARGE_BUFF * 1.5,
         left_buff: float = MED_LARGE_BUFF * 1.5,
@@ -88,8 +117,8 @@ class ArrangedBullets(VGroup):
         self.left_buff = left_buff
         self.global_shift = global_shift
 
-        rows = [(row if isinstance(row, Bullet) else Bullet(row)) for row in rows]
-        bullet_rows: T.Iterable[Bullet] = (
+        rows = [(row if isinstance(row, MathBullet) else Bullet(row)) for row in rows]
+        bullet_rows: T.Iterable[MathBullet] = (
             VGroup(*rows)
             .arrange(DOWN, aligned_edge=LEFT, buff=line_spacing)
             .to_edge(LEFT, buff=left_buff)
