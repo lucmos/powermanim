@@ -1,4 +1,5 @@
 import itertools
+import typing as T
 from typing import Iterable, Sequence
 
 from colour import Color
@@ -9,8 +10,8 @@ class ChartBars(VGroup):
     def __init__(
         self,
         axes,
-        values: Sequence[float | int],
-        xs: Sequence[float] | None = None,
+        values: Sequence[T.Union[float, int]],
+        xs: T.Union[Sequence[float], None] = None,
         width_ratio: float = 1.0,
         offset: float = 0.5,
         fill_color: Color = BLUE,
@@ -61,7 +62,7 @@ class ChartBars(VGroup):
         self.xs = xs
         self.set_values(values)
 
-    def set_values(self, values: Iterable[float | int]):
+    def set_values(self, values: Iterable[T.Union[float, int]]):
         y_unit = self.axes.y_axis.get_unit_size()
         for rect, value in zip(self, values):
             new_height = value * y_unit
