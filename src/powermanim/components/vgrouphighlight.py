@@ -29,9 +29,6 @@ class VGroupHighlight(VGroup):
         """
         super().__init__(*args, **kwargs)
 
-        for x in self.submobjects:
-            x.save_state()
-
         self.anim_run_time = anim_run_time
         self.anim_lag_ratio = anim_lag_ratio
         self.active_opacity = active_opacity
@@ -59,14 +56,17 @@ class VGroupHighlight(VGroup):
             indices = [indices]
 
         for to_highlight in indices:
-            self.submobjects[to_highlight].target = self.submobjects[to_highlight].saved_state.copy()
-            self.submobjects[to_highlight].target.scale(
+            item = self.submobjects[to_highlight]
+            if not hasattr(item, "saved_state") or item.saved_state is None:
+                item.save_state()
+            item.target = item.saved_state.copy()
+            item.target.scale(
                 self.scale_active,
                 about_point=self.scale_about_point,
                 about_edge=self.scale_about_edge,
             )
-            self.submobjects[to_highlight].target.set_opacity(self.active_opacity)
-            anims.append(MoveToTarget(self.submobjects[to_highlight]))
+            item.target.set_opacity(self.active_opacity)
+            anims.append(MoveToTarget(item))
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
