@@ -2,9 +2,7 @@ from manim import *
 
 
 class Reference(VGroup):
-
     def __init__(self, text: str, font_size: int = 28, color: ManimColor = GRAY):
-
         text = rf"\textit{{{text}}}"
         boxtext = rf"\mbox{{{text}}}"
         tex = Tex(
