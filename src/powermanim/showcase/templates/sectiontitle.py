@@ -8,7 +8,7 @@ class SectionTitleShowcase(ShowcaseScene):
 
     def construct(self):
         title = SectionTitle("Section Title")
-        title.show(self)
+        self.play(title.show())
         self.wait(1)
-        title.hide(self)
+        self.play(title.hide())
         self.wait(1)
