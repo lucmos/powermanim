@@ -1,7 +1,7 @@
 import itertools
 from typing import Iterable, Sequence
 
-from colour import Color
+from manim import ManimColor as Color
 from manim import *
 
 
