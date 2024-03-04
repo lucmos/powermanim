@@ -4,7 +4,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 from powermanim.templates.reference import Reference
 
 
-class SectionTitleShowcase(ShowcaseScene):
+class ReferenceShowcase(ShowcaseScene):
     def showcasing():
         return Reference
 
