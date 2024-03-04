@@ -1,5 +1,5 @@
+from manim import ManimColor as Color
 from manim import *
-from manim.utils.color import Color
 
 
 class SectionTitle(VGroup):
@@ -34,31 +34,29 @@ class SectionTitle(VGroup):
 
         super().__init__(self.slide_title)
 
-    def show(self, scene: Scene) -> None:
+    def show(self) -> Animation:
         """Show the section title.
 
         Args:
             scene (Scene): the scene.
         """
-        scene.play(
-            AnimationGroup(
-                DrawBorderThenFill(self.slide_title, run_time=self.in_run_time),
-                Circumscribe(
-                    self.slide_title,
-                    color=self.border_color,
-                    buff=self.border_buff,
-                ),
-                lag_ratio=self.border_lag_ratio,
-            )
+        return AnimationGroup(
+            DrawBorderThenFill(self.slide_title, run_time=self.in_run_time),
+            Circumscribe(
+                self.slide_title,
+                color=self.border_color,
+                buff=self.border_buff,
+            ),
+            lag_ratio=self.border_lag_ratio,
         )
 
-    def hide(self, scene: Scene) -> None:
+    def hide(self) -> Animation:
         """Hide the section title.
 
         Args:
             scene (Scene): the scene.
         """
-        scene.play(
+        return AnimationGroup(
             FadeOut(self.slide_title, shift=self.out_shift),
             run_time=self.out_run_time,
         )
