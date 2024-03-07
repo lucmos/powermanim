@@ -48,6 +48,10 @@ class BulletList(VGroup):
 
         self.highlighted = 0
 
+    @property
+    def ngroups(self) -> int:
+        return self.arranged_list.ngroups
+
     def also_next(self) -> Animation:
         """Highlights also the next item in the list."""
         self.highlighted += 1

@@ -40,8 +40,8 @@ class Invariance(VGroup):
 
         super().__init__(self.axis, *self.dots)
 
-    def transformation_anim(self, transformation: np.ndarray, run_time: float = 1.0):
-        self.points_coords = self.axis.coords_to_point(np.matmul(self.points_coords_orig, transformation))
+    def transformation_anim(self, transformation: np.ndarray, bias: np.ndarray = 0, run_time: float = 1.0):
+        self.points_coords = self.axis.coords_to_point(np.matmul(self.points_coords_orig, transformation) + bias)
 
         return AnimationGroup(
             *(self.dots[i].animate.move_to(self.points_coords[i]) for i in range(len(self.points_coords))),
