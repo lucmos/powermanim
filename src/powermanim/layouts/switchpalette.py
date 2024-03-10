@@ -166,6 +166,8 @@ class SwitchPalette:
         Colors.PINK._internal_value = self.ORIGINAL_LIGHT_PINK._internal_value
         Colors.LIGHT_PINK._internal_value = self.ORIGINAL_PINK._internal_value
 
+        Colors.YELLOW._internal_value = ManimColor._internal_from_hex_string("F8DB5F", alpha=1)
+        Colors.YELLOW_C._internal_value = ManimColor._internal_from_hex_string("F8DB5F", alpha=1)
         return self
 
     def restore_palette(self) -> SwitchPalette:
