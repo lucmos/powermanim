@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from copy import deepcopy
 
 import manim.utils.color.manim_colors as Colors
@@ -74,10 +76,10 @@ class SwitchPalette:
         self.ORIGINAL_DARK_BROWN = deepcopy(Colors.DARK_BROWN)
         self.ORIGINAL_LIGHT_BROWN = deepcopy(Colors.LIGHT_BROWN)
 
-    def switch_to_white_palette(self):
+    def switch_to_white_palette(self) -> SwitchPalette:
         """Switch to white palette.
 
-        Must be called before the scene is created.
+        Must be called before the scene is created, after the manim imports.
 
         This function is intended to be used to convert slides from the black palette to the white palette.
         Do not use it to build white slides from scratch, since it doesn't have consistent colors naming,
@@ -163,3 +165,89 @@ class SwitchPalette:
 
         Colors.PINK._internal_value = self.ORIGINAL_LIGHT_PINK._internal_value
         Colors.LIGHT_PINK._internal_value = self.ORIGINAL_PINK._internal_value
+
+        return self
+
+    def restore_palette(self) -> SwitchPalette:
+        """Switch to the original manim palette."""
+        Colors.WHITE._internal_value = self.ORIGINAL_WHITE._internal_value
+        Colors.GRAY_A._internal_value = self.ORIGINAL_GRAY_A._internal_value
+        Colors.GREY_A._internal_value = self.ORIGINAL_GREY_A._internal_value
+        Colors.GRAY_B._internal_value = self.ORIGINAL_GRAY_B._internal_value
+        Colors.GREY_B._internal_value = self.ORIGINAL_GREY_B._internal_value
+        Colors.GRAY_C._internal_value = self.ORIGINAL_GRAY_C._internal_value
+        Colors.GREY_C._internal_value = self.ORIGINAL_GREY_C._internal_value
+        Colors.GRAY_D._internal_value = self.ORIGINAL_GRAY_D._internal_value
+        Colors.GREY_D._internal_value = self.ORIGINAL_GREY_D._internal_value
+        Colors.GRAY_E._internal_value = self.ORIGINAL_GRAY_E._internal_value
+        Colors.GREY_E._internal_value = self.ORIGINAL_GREY_E._internal_value
+        Colors.BLACK._internal_value = self.ORIGINAL_BLACK._internal_value
+
+        Colors.LIGHTER_GRAY._internal_value = self.ORIGINAL_LIGHTER_GRAY._internal_value
+        Colors.LIGHTER_GREY._internal_value = self.ORIGINAL_LIGHTER_GREY._internal_value
+        Colors.LIGHT_GRAY._internal_value = self.ORIGINAL_LIGHT_GRAY._internal_value
+        Colors.LIGHT_GREY._internal_value = self.ORIGINAL_LIGHT_GREY._internal_value
+        Colors.GRAY._internal_value = self.ORIGINAL_GRAY._internal_value
+        Colors.GREY._internal_value = self.ORIGINAL_GREY._internal_value
+        Colors.DARK_GRAY._internal_value = self.ORIGINAL_DARK_GRAY._internal_value
+        Colors.DARK_GREY._internal_value = self.ORIGINAL_DARK_GREY._internal_value
+        Colors.DARKER_GRAY._internal_value = self.ORIGINAL_DARKER_GRAY._internal_value
+        Colors.DARKER_GREY._internal_value = self.ORIGINAL_DARKER_GREY._internal_value
+
+        Colors.BLUE_A._internal_value = self.ORIGINAL_BLUE_A._internal_value
+        Colors.BLUE_B._internal_value = self.ORIGINAL_BLUE_B._internal_value
+        Colors.BLUE_C._internal_value = self.ORIGINAL_BLUE_C._internal_value
+        Colors.BLUE_D._internal_value = self.ORIGINAL_BLUE_D._internal_value
+        Colors.BLUE_E._internal_value = self.ORIGINAL_BLUE_E._internal_value
+
+        Colors.TEAL_A._internal_value = self.ORIGINAL_TEAL_A._internal_value
+        Colors.TEAL_B._internal_value = self.ORIGINAL_TEAL_B._internal_value
+        Colors.TEAL_C._internal_value = self.ORIGINAL_TEAL_C._internal_value
+        Colors.TEAL_D._internal_value = self.ORIGINAL_TEAL_D._internal_value
+        Colors.TEAL_E._internal_value = self.ORIGINAL_TEAL_E._internal_value
+
+        Colors.GREEN_A._internal_value = self.ORIGINAL_GREEN_A._internal_value
+        Colors.GREEN_B._internal_value = self.ORIGINAL_GREEN_B._internal_value
+        Colors.GREEN_C._internal_value = self.ORIGINAL_GREEN_C._internal_value
+        Colors.GREEN_D._internal_value = self.ORIGINAL_GREEN_D._internal_value
+        Colors.GREEN_E._internal_value = self.ORIGINAL_GREEN_E._internal_value
+
+        Colors.YELLOW_A._internal_value = self.ORIGINAL_YELLOW_A._internal_value
+        Colors.YELLOW_B._internal_value = self.ORIGINAL_YELLOW_B._internal_value
+        Colors.YELLOW_C._internal_value = self.ORIGINAL_YELLOW_C._internal_value
+        Colors.YELLOW_D._internal_value = self.ORIGINAL_YELLOW_D._internal_value
+        Colors.YELLOW_E._internal_value = self.ORIGINAL_YELLOW_E._internal_value
+
+        Colors.GOLD_A._internal_value = self.ORIGINAL_GOLD_A._internal_value
+        Colors.GOLD_B._internal_value = self.ORIGINAL_GOLD_B._internal_value
+        Colors.GOLD_C._internal_value = self.ORIGINAL_GOLD_C._internal_value
+        Colors.GOLD_D._internal_value = self.ORIGINAL_GOLD_D._internal_value
+        Colors.GOLD_E._internal_value = self.ORIGINAL_GOLD_E._internal_value
+
+        Colors.RED_A._internal_value = self.ORIGINAL_RED_A._internal_value
+        Colors.RED_B._internal_value = self.ORIGINAL_RED_B._internal_value
+        Colors.RED_C._internal_value = self.ORIGINAL_RED_C._internal_value
+        Colors.RED_D._internal_value = self.ORIGINAL_RED_D._internal_value
+        Colors.RED_E._internal_value = self.ORIGINAL_RED_E._internal_value
+
+        Colors.MAROON_A._internal_value = self.ORIGINAL_MAROON_A._internal_value
+        Colors.MAROON_B._internal_value = self.ORIGINAL_MAROON_B._internal_value
+        Colors.MAROON_C._internal_value = self.ORIGINAL_MAROON_C._internal_value
+        Colors.MAROON_D._internal_value = self.ORIGINAL_MAROON_D._internal_value
+        Colors.MAROON_E._internal_value = self.ORIGINAL_MAROON_E._internal_value
+
+        Colors.PURPLE_A._internal_value = self.ORIGINAL_PURPLE_A._internal_value
+        Colors.PURPLE_B._internal_value = self.ORIGINAL_PURPLE_B._internal_value
+        Colors.PURPLE_C._internal_value = self.ORIGINAL_PURPLE_C._internal_value
+        Colors.PURPLE_D._internal_value = self.ORIGINAL_PURPLE_D._internal_value
+        Colors.PURPLE_E._internal_value = self.ORIGINAL_PURPLE_E._internal_value
+
+        Colors.LIGHT_BROWN._internal_value = self.ORIGINAL_LIGHT_BROWN._internal_value
+        Colors.DARK_BROWN._internal_value = self.ORIGINAL_DARK_BROWN._internal_value
+
+        Colors.PINK._internal_value = self.ORIGINAL_PINK._internal_value
+        Colors.LIGHT_PINK._internal_value = self.ORIGINAL_LIGHT_PINK._internal_value
+
+        config.background_color = Colors.BLACK
+
+        return self

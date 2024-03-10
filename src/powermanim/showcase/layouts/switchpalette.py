@@ -123,19 +123,22 @@ class SwitchPaletteShowcase(ShowcaseScene):
     def construct(self):
         black_colors = _build_colors_overview()
         self.add(black_colors)
-        self.wait()
+        self.wait(0.5)
 
         # To be used before the scene is created, after the manim imports
         # Here, it is used to switch to white palette with a forced white background
         # only for animating the difference
-        SwitchPalette().switch_to_white_palette()
+        palette_switcher = SwitchPalette().switch_to_white_palette()
 
         white_colors = VGroup(
             Rectangle(BLACK, height=10, width=20, fill_opacity=1).move_to(ORIGIN), _build_colors_overview()
         )
-        self.play(FadeOut(black_colors), FadeIn(white_colors), run_time=2)
+        self.play(FadeOut(black_colors), FadeIn(white_colors), run_time=3)
 
-        self.wait(2)
+        self.wait(1)
 
-        self.play(FadeOut(white_colors), FadeIn(black_colors), run_time=2)
-        self.wait()
+        self.play(FadeOut(white_colors), FadeIn(black_colors), run_time=3)
+        self.wait(0.5)
+
+        # Just to not mess with the other showcase scenes in the CI/CD
+        palette_switcher.restore_palette()
