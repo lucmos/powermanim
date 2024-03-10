@@ -8,7 +8,6 @@ from manim import *
 
 class SwitchPalette:
     def __init__(self):
-        self.config = config
         self.ORIGINAL_BLACK = deepcopy(Colors.BLACK)
         self.ORIGINAL_GRAY_E = deepcopy(Colors.GRAY_E)
         self.ORIGINAL_GREY_E = deepcopy(Colors.GREY_E)
@@ -75,6 +74,8 @@ class SwitchPalette:
         self.ORIGINAL_LIGHT_PINK = deepcopy(Colors.LIGHT_PINK)
         self.ORIGINAL_DARK_BROWN = deepcopy(Colors.DARK_BROWN)
         self.ORIGINAL_LIGHT_BROWN = deepcopy(Colors.LIGHT_BROWN)
+
+        self.ORIGINAL_YELLOW = deepcopy(Colors.YELLOW)
 
     def switch_to_white_palette(self) -> SwitchPalette:
         """Switch to white palette.
@@ -166,12 +167,14 @@ class SwitchPalette:
         Colors.PINK._internal_value = self.ORIGINAL_LIGHT_PINK._internal_value
         Colors.LIGHT_PINK._internal_value = self.ORIGINAL_PINK._internal_value
 
+        # Fix the yellow color
         Colors.YELLOW._internal_value = ManimColor._internal_from_hex_string("F8DB5F", alpha=1)
         Colors.YELLOW_C._internal_value = ManimColor._internal_from_hex_string("F8DB5F", alpha=1)
         return self
 
     def restore_palette(self) -> SwitchPalette:
         """Switch to the original manim palette."""
+        # Restore the original palette
         Colors.WHITE._internal_value = self.ORIGINAL_WHITE._internal_value
         Colors.GRAY_A._internal_value = self.ORIGINAL_GRAY_A._internal_value
         Colors.GREY_A._internal_value = self.ORIGINAL_GREY_A._internal_value
@@ -249,6 +252,9 @@ class SwitchPalette:
 
         Colors.PINK._internal_value = self.ORIGINAL_PINK._internal_value
         Colors.LIGHT_PINK._internal_value = self.ORIGINAL_LIGHT_PINK._internal_value
+
+        # Restore the yellow color
+        Colors.YELLOW._internal_value = self.ORIGINAL_YELLOW._internal_value
 
         config.background_color = Colors.BLACK
 
