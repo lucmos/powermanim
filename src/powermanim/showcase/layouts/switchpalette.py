@@ -111,8 +111,9 @@ def _build_colors_overview():
 
 
 class SwitchPaletteShowcase(ShowcaseScene):
-    """Manim Colors Overview
+    """Available palettes overview.
 
+    The colors overview is taken from the manim library:
     https://github.com/ManimCommunity/manim/blob/main/manim/utils/color/manim_colors.py
     """
 
@@ -125,8 +126,8 @@ class SwitchPaletteShowcase(ShowcaseScene):
         self.wait()
 
         # To be used before the scene is created, after the manim imports
-        # Here it is used to switch to white palette with
-        # a forced white background only for showcasing the difference
+        # Here, it is used to switch to white palette with a forced white background
+        # only for animating the difference
         SwitchPalette().switch_to_white_palette()
 
         white_colors = VGroup(
