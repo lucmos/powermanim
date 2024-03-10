@@ -4,7 +4,6 @@ from manim import *
 
 
 class DirectionalArrow(Arrow):
-
     def __init__(
         self,
         start: tp.Union[VMobject, np.ndarray],

@@ -1,4 +1,3 @@
-from click.core import V
 from manim import *
 
 from powermanim.components.directionalarrow import DirectionalArrow
