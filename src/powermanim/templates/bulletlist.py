@@ -46,35 +46,22 @@ class BulletList(VGroup):
         )
         super().__init__(self.rows)
 
-        self.highlighted = 0
-
     @property
     def ngroups(self) -> int:
-        return self.arranged_list.ngroups
+        return len(self.nrows)
 
     def also_next(self) -> Animation:
         """Highlights also the next item in the list."""
-        self.highlighted += 1
-
-        if self.highlighted > self.arranged_list.ngroups:
-            raise StopIteration("No more elements to highlight.")
-
-        return self.rows.highlight(indices=list(range(self.highlighted)))
+        return self.rows.also_next()
 
     def only_next(self) -> Animation:
         """Highlights only the next item in the list."""
-        if self.highlighted > self.arranged_list.ngroups:
-            raise StopIteration("No more elements to highlight.")
-        anims = self.rows.highlight(indices=self.highlighted)
-        self.highlighted += 1
-        return anims
+        return self.rows.only_next()
 
     def clear(self) -> Animation:
         """Clears the list hightlighting."""
-        anims = self.rows.highlight(indices=[])
-        self.highlighted = 0
-        return anims
+        return self.rows.clear()
 
     def all(self) -> Animation:
         """Highlights all the list."""
-        return self.rows.highlight(indices=list(range(len(self.rows))))
+        return self.rows.all()

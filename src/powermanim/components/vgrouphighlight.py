@@ -37,6 +37,7 @@ class VGroupHighlight(VGroup):
         self.scale_about_edge = scale_about_edge
 
         self.previously_active_idxs = []
+        self.highlighted = 0
 
     def highlight(self, indices: T.Union[int, T.Sequence[int]]) -> AnimationGroup:
         """Highlights the submobjects in the given indices in the scene.
@@ -78,3 +79,30 @@ class VGroupHighlight(VGroup):
         self.previously_active_idxs = indices
 
         return AnimationGroup(*anims, lag_ratio=self.anim_lag_ratio)
+
+    def also_next(self) -> Animation:
+        """Highlights also the next item in the VGroup."""
+        self.highlighted += 1
+
+        if self.highlighted > len(self):
+            raise StopIteration("No more elements to highlight.")
+
+        return self.highlight(indices=list(range(self.highlighted)))
+
+    def only_next(self) -> Animation:
+        """Highlights only the next item in the VGroup."""
+        if self.highlighted > len(self):
+            raise StopIteration("No more elements to highlight.")
+        anims = self.highlight(indices=self.highlighted)
+        self.highlighted += 1
+        return anims
+
+    def clear(self) -> Animation:
+        """Clears the VGroup hightlighting."""
+        anims = self.highlight(indices=[])
+        self.highlighted = 0
+        return anims
+
+    def all(self) -> Animation:
+        """Highlights all the VGroup."""
+        return self.highlight(indices=list(range(len(self))))
