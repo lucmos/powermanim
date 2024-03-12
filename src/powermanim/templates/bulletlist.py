@@ -2,7 +2,7 @@ import typing as T
 
 from manim import *
 
-from powermanim.components.vgrouphighlight import VGroupHighlight
+from powermanim.components.vgrouphighlight import AutoHighlightable, VGroupHighlight
 from powermanim.layouts.arrangedbullets import ArrangedBullets
 
 
@@ -36,13 +36,21 @@ class BulletList(VGroup):
             indent_buff=indent_buff,
             left_buff=left_buff,
             global_shift=global_shift,
-        ).set_opacity(inactive_opacity)
+        )
 
         self.rows = VGroupHighlight(
-            *self.arranged_list,
-            active_opacity=active_opacity,
-            scale_active=scale_active,
-            scale_about_edge=LEFT,
+            *(
+                AutoHighlightable(
+                    x,
+                    active_fill_opacity=active_opacity,
+                    active_stroke_opacity=active_opacity,
+                    inactive_fill_opacity=inactive_opacity,
+                    inactive_stroke_opacity=inactive_opacity,
+                    scale_active=scale_active,
+                    scale_about_edge=LEFT,
+                )
+                for x in self.arranged_list
+            )
         )
         super().__init__(self.rows)
 

@@ -23,7 +23,7 @@ class VGroupHighlightShowcase(ShowcaseScene):
             )
         ]
 
-        group = VGroupHighlight(*dots, anim_run_time=1, anim_lag_ratio=0.1)
+        group = VGroupHighlight(*dots, anim_lag_ratio=0.1)
         self.add(group)
         self.play(group.highlight(0))
         self.play(group.highlight(1))

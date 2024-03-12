@@ -3,38 +3,100 @@ import typing as T
 from manim import *
 
 
+class Highlightable(VGroup):
+    def __init__(
+        self,
+        inactive_vmobject: VMobject,
+        active_vmobject: VMobject,
+        start_active: bool = False,
+        activation_anim_run_time: float = 1.0,
+        deactivation_anim_run_time: float = 1.0,
+    ) -> None:
+        super().__init__(active_vmobject if start_active else inactive_vmobject)
+        self.inactive_vmobject = inactive_vmobject.copy()
+        self.active_vmobject = active_vmobject.copy()
+        self.is_active = start_active
+        self.activation_anim_run_time = activation_anim_run_time
+        self.deactivation_anim_run_time = deactivation_anim_run_time
+
+    @property
+    def obj(self) -> VMobject:
+        return self[0]
+
+    def get_activation_anim(self) -> Animation:
+        if self.is_active:
+            raise ValueError("The object is already active.")
+        self.is_active = True
+        return Transform(self.obj, self.active_vmobject, run_time=self.activation_anim_run_time)
+
+    def get_deactivation_anim(self) -> Animation:
+        if not self.is_active:
+            raise ValueError("The object is already inactive.")
+        self.is_active = False
+        return Transform(self.obj, self.inactive_vmobject, run_time=self.deactivation_anim_run_time)
+
+
+class AutoHighlightable(Highlightable):
+    def __init__(
+        self,
+        vmobject: VMobject,
+        active_fill_opacity: float = 1.0,
+        active_stroke_opacity: float = 1.0,
+        inactive_fill_opacity: float = 0.5,
+        inactive_stroke_opacity: float = 0.5,
+        scale_active: float = 1.0,
+        scale_about_point=None,
+        scale_about_edge=LEFT,
+    ) -> None:
+        """Highlightable component that automatically creates the active and inactive VMobjects.
+
+        Args:
+            vmobject (VMobject): The object to activate or deactivate VMobject.
+            active_fill_opacity (float): The fill opacity of the active VMobject.
+            active_stroke_opacity (float): The stroke opacity of the active VMobject.
+            inactive_fill_opacity (float): The fill opacity of the inactive VMobject.
+            inactive_stroke_opacity (float): The stroke opacity of the inactive VMobject.
+            scale_active (float): The scale of the active VMobject.
+            scale_about_point (np.ndarray): The point to scale about.
+            scale_about_edge (np.ndarray): The edge to scale about.
+        """
+        self.active_fill_opacity = active_fill_opacity
+        self.active_stroke_opacity = active_stroke_opacity
+        self.inactive_fill_opacity = inactive_fill_opacity
+        self.inactive_stroke_opacity = inactive_stroke_opacity
+        self.scale_active = scale_active
+        self.scale_about_point = scale_about_point
+        self.scale_about_edge = scale_about_edge
+
+        active_obj = vmobject.copy()
+        active_obj.scale(self.scale_active, about_point=self.scale_about_point, about_edge=self.scale_about_edge)
+        active_obj.set_fill(opacity=self.active_fill_opacity)
+        active_obj.set_stroke(opacity=self.active_stroke_opacity)
+
+        inactive_obj = vmobject.copy()
+        inactive_obj.set_fill(opacity=self.inactive_fill_opacity)
+        inactive_obj.set_stroke(opacity=self.inactive_stroke_opacity)
+        super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False)
+
+
 class VGroupHighlight(VGroup):
     def __init__(
         self,
         *args: VMobject,
-        anim_run_time: float = 1.0,
         anim_lag_ratio: float = 0,
-        active_opacity: float = 1.0,
-        scale_active: float = 1.0,
-        scale_about_point=None,
-        scale_about_edge=None,
         **kwargs: VMobject,
     ) -> None:
         """Group component that can highlight a subset of its submobjects.
 
         Args:
             *args: Submobjects to be added to the VGroup.
-            anim_run_time (float): The run time of the animation.
             anim_lag_ratio (float): The lag ratio of the animation.
-            active_opacity (float): The opacity of the highlighted submobjects.
-            scale_active (float): The scale of the highlighted submobjects.
-            scale_about_point (np.ndarray): The point to scale about.
-            scale_about_edge (np.ndarray): The edge to scale about.
             **kwargs: Keyword arguments to be passed to the VGroup.
         """
-        super().__init__(*args, **kwargs)
+        args_highlightable = (AutoHighlightable(x) if not isinstance(x, Highlightable) else x for x in args)
+        super().__init__(*args_highlightable, **kwargs)
 
-        self.anim_run_time = anim_run_time
         self.anim_lag_ratio = anim_lag_ratio
-        self.active_opacity = active_opacity
-        self.scale_active = scale_active
-        self.scale_about_point = scale_about_point
-        self.scale_about_edge = scale_about_edge
 
         self.previously_active_idxs = []
         self.highlighted = 0
@@ -57,24 +119,14 @@ class VGroupHighlight(VGroup):
             indices = [indices]
 
         for to_highlight in indices:
-            item = self.submobjects[to_highlight]
-            if not hasattr(item, "saved_state") or item.saved_state is None:
-                item.save_state()
-            item.target = item.saved_state.copy()
-            item.target.scale(
-                self.scale_active,
-                about_point=self.scale_about_point,
-                about_edge=self.scale_about_edge,
-            )
-            item.target.set_opacity(self.active_opacity)
-            anims.append(MoveToTarget(item))
+            if to_highlight in self.previously_active_idxs:
+                continue
+            anims.append(self.submobjects[to_highlight].get_activation_anim())
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
                 if previously_active_idx not in indices:
-                    anims.append(
-                        self.submobjects[previously_active_idx].animate.restore(),
-                    )
+                    anims.append(self.submobjects[previously_active_idx].get_deactivation_anim())
 
         self.previously_active_idxs = indices
 
