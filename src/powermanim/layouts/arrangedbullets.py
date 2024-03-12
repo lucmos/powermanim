@@ -1,5 +1,4 @@
 import typing as T
-from collections import defaultdict
 
 from manim import *
 

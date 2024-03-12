@@ -1,7 +1,7 @@
 from manim import *
 
+from powermanim import Reference
 from powermanim.showcase.showcasescene import ShowcaseScene
-from powermanim.templates.reference import Reference
 
 
 class ReferenceShowcase(ShowcaseScene):

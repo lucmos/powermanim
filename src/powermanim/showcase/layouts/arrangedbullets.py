@@ -1,6 +1,6 @@
 from manim import *
 
-from powermanim.layouts.arrangedbullets import ArrangedBullets, Bullet
+from powermanim import ArrangedBullets, Bullet
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

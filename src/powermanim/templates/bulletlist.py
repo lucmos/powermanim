@@ -2,8 +2,7 @@ import typing as T
 
 from manim import *
 
-from powermanim.components.vgrouphighlight import AutoHighlightable, VGroupHighlight
-from powermanim.layouts.arrangedbullets import ArrangedBullets
+from powermanim import ArrangedBullets, AutoHighlightable, MathBullet, VGroupHighlight
 
 
 class BulletList(VGroupHighlight):

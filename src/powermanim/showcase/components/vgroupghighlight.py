@@ -1,6 +1,6 @@
 from manim import *
 
-from powermanim.components.vgrouphighlight import VGroupHighlight
+from powermanim import VGroupHighlight
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

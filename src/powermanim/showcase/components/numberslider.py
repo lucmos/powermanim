@@ -1,6 +1,6 @@
 from manim import *
 
-from powermanim.components.numberslider import NumberSlider
+from powermanim import NumberSlider
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

@@ -1,6 +1,6 @@
 from manim import *
 
-from powermanim.components.directionalarrow import DirectionalArrow
+from powermanim import DirectionalArrow
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

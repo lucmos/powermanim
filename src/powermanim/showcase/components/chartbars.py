@@ -1,7 +1,7 @@
 from manim import *
 from scipy.special import softmax
 
-from powermanim.components.chartbars import ChartBars
+from powermanim import ChartBars
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

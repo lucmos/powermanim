@@ -1,8 +1,7 @@
 from manim import *
 
-from powermanim.layouts.arrangedbullets import Bullet
+from powermanim import Bullet, BulletList
 from powermanim.showcase.showcasescene import ShowcaseScene
-from powermanim.templates.bulletlist import BulletList
 
 
 class BulletListShowcase(ShowcaseScene):

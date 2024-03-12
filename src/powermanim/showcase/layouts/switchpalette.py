@@ -1,7 +1,7 @@
 import manim.utils.color.manim_colors as Colors
 from manim import *
 
-from powermanim.layouts.switchpalette import SwitchPalette
+from powermanim import SwitchPalette
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 
