@@ -6,7 +6,7 @@ from powermanim.components.vgrouphighlight import AutoHighlightable, VGroupHighl
 from powermanim.layouts.arrangedbullets import ArrangedBullets
 
 
-class BulletList(VGroup):
+class BulletList(VGroupHighlight):
     def __init__(
         self,
         *rows: T.Union[MathBullet, Tex, Text],
@@ -17,6 +17,7 @@ class BulletList(VGroup):
         inactive_opacity: float = 0.5,
         active_opacity: float = 1.0,
         scale_active: float = 1.0,
+        anim_lag_ratio: float = 0,
     ):
         """A class to represent an highlatable list of items.
 
@@ -38,7 +39,7 @@ class BulletList(VGroup):
             global_shift=global_shift,
         )
 
-        self.rows = VGroupHighlight(
+        super().__init__(
             *(
                 AutoHighlightable(
                     x,
@@ -51,26 +52,6 @@ class BulletList(VGroup):
                     group=x.group if isinstance(x, MathBullet) else None,
                 )
                 for x in self.arranged_list
-            )
+            ),
+            anim_lag_ratio=anim_lag_ratio,
         )
-        super().__init__(self.rows)
-
-    @property
-    def ngroups(self) -> int:
-        return len(self.nrows)
-
-    def also_next(self) -> Animation:
-        """Highlights also the next item in the list."""
-        return self.rows.also_next()
-
-    def only_next(self) -> Animation:
-        """Highlights only the next item in the list."""
-        return self.rows.only_next()
-
-    def clear(self) -> Animation:
-        """Clears the list hightlighting."""
-        return self.rows.clear()
-
-    def all(self) -> Animation:
-        """Highlights all the list."""
-        return self.rows.all()
