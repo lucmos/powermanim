@@ -12,9 +12,20 @@ class Highlightable(VGroup):
         activation_anim_run_time: float = 1.0,
         deactivation_anim_run_time: float = 1.0,
     ) -> None:
-        super().__init__(active_vmobject if start_active else inactive_vmobject)
-        self.inactive_vmobject = inactive_vmobject.copy()
-        self.active_vmobject = active_vmobject.copy()
+        self.active_stroke_opacities = [x.stroke_opacity for x in active_vmobject.get_family()]
+        self.active_fill_opacities = [x.fill_opacity for x in active_vmobject.get_family()]
+        self.inactive_stroke_opacities = [x.stroke_opacity for x in inactive_vmobject.get_family()]
+        self.inactive_fill_opacities = [x.fill_opacity for x in inactive_vmobject.get_family()]
+
+        super().__init__(
+            active_vmobject.copy() if start_active else inactive_vmobject.copy(),
+            active_vmobject.set_opacity(0),
+            inactive_vmobject.set_opacity(0),
+        )
+
+        self.active_vmobject = active_vmobject
+        self.inactive_vmobject = inactive_vmobject
+
         self.is_active = start_active
         self.activation_anim_run_time = activation_anim_run_time
         self.deactivation_anim_run_time = deactivation_anim_run_time
@@ -27,24 +38,41 @@ class Highlightable(VGroup):
         if self.is_active:
             raise ValueError("The object is already active.")
         self.is_active = True
-        return Transform(self.obj, self.active_vmobject, run_time=self.activation_anim_run_time)
+
+        target = self.active_vmobject.copy()
+        for subobj, stroke_opacity, fill_opacity in zip(
+            target.get_family(), self.active_stroke_opacities, self.active_fill_opacities
+        ):
+            subobj.set_fill(opacity=fill_opacity, family=False)
+            subobj.set_stroke(opacity=stroke_opacity, family=False)
+            subobj.set_stroke(opacity=stroke_opacity, family=False, background=True)
+        return Transform(self.obj, target, run_time=self.activation_anim_run_time)
 
     def get_deactivation_anim(self) -> Animation:
         if not self.is_active:
             raise ValueError("The object is already inactive.")
         self.is_active = False
-        return Transform(self.obj, self.inactive_vmobject, run_time=self.deactivation_anim_run_time)
+
+        target = self.inactive_vmobject.copy()
+        for subobj, stroke_opacity, fill_opacity in zip(
+            target.get_family(), self.inactive_stroke_opacities, self.inactive_fill_opacities
+        ):
+            subobj.set_fill(opacity=fill_opacity, family=False)
+            subobj.set_stroke(opacity=stroke_opacity, family=False)
+            subobj.set_stroke(opacity=stroke_opacity, family=False, background=True)
+
+        return Transform(self.obj, target, run_time=self.deactivation_anim_run_time)
 
 
 class AutoHighlightable(Highlightable):
     def __init__(
         self,
         vmobject: VMobject,
-        active_fill_opacity: float = 1.0,
-        active_stroke_opacity: float = 1.0,
-        inactive_fill_opacity: float = 0.5,
-        inactive_stroke_opacity: float = 0.5,
-        scale_active: float = 1.0,
+        active_fill_opacity: T.Optional[float] = 1.0,
+        active_stroke_opacity: T.Optional[float] = 1.0,
+        inactive_fill_opacity: T.Optional[float] = 0.5,
+        inactive_stroke_opacity: T.Optional[float] = 0.5,
+        scale_active: T.Optional[float] = 1.0,
         scale_about_point=None,
         scale_about_edge=LEFT,
     ) -> None:
@@ -69,13 +97,18 @@ class AutoHighlightable(Highlightable):
         self.scale_about_edge = scale_about_edge
 
         active_obj = vmobject.copy()
-        active_obj.scale(self.scale_active, about_point=self.scale_about_point, about_edge=self.scale_about_edge)
-        active_obj.set_fill(opacity=self.active_fill_opacity)
-        active_obj.set_stroke(opacity=self.active_stroke_opacity)
+        if self.scale_active is not None:
+            active_obj.scale(self.scale_active, about_point=self.scale_about_point, about_edge=self.scale_about_edge)
+        if self.active_fill_opacity is not None:
+            active_obj.set_fill(opacity=self.active_fill_opacity)
+        if self.active_stroke_opacity is not None:
+            active_obj.set_stroke(opacity=self.active_stroke_opacity)
 
         inactive_obj = vmobject.copy()
-        inactive_obj.set_fill(opacity=self.inactive_fill_opacity)
-        inactive_obj.set_stroke(opacity=self.inactive_stroke_opacity)
+        if self.inactive_fill_opacity is not None:
+            inactive_obj.set_fill(opacity=self.inactive_fill_opacity)
+        if self.inactive_stroke_opacity is not None:
+            inactive_obj.set_stroke(opacity=self.inactive_stroke_opacity)
         super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False)
 
 
