@@ -47,6 +47,7 @@ class BulletList(VGroupHighlight):
                     inactive_fill_opacity=inactive_opacity,
                     inactive_stroke_opacity=inactive_opacity,
                     scale_active=scale_active,
+                    scale_about_point=None,
                     scale_about_edge=LEFT,
                     group=x.group if isinstance(x, MathBullet) else None,
                 )
