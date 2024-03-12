@@ -1,4 +1,5 @@
 import typing as T
+from collections import defaultdict
 
 from manim import *
 
@@ -11,6 +12,7 @@ class Highlightable(VGroup):
         start_active: bool = False,
         activation_anim_run_time: float = 1.0,
         deactivation_anim_run_time: float = 1.0,
+        group: T.Optional[int] = None,
     ) -> None:
         self.active_stroke_opacities = [x.stroke_opacity for x in active_vmobject.get_family()]
         self.active_fill_opacities = [x.fill_opacity for x in active_vmobject.get_family()]
@@ -29,6 +31,7 @@ class Highlightable(VGroup):
         self.is_active = start_active
         self.activation_anim_run_time = activation_anim_run_time
         self.deactivation_anim_run_time = deactivation_anim_run_time
+        self.group = group
 
     @property
     def obj(self) -> VMobject:
@@ -75,6 +78,7 @@ class AutoHighlightable(Highlightable):
         scale_active: T.Optional[float] = 1.0,
         scale_about_point=None,
         scale_about_edge=LEFT,
+        group: T.Optional[int] = None,
     ) -> None:
         """Highlightable component that automatically creates the active and inactive VMobjects.
 
@@ -109,7 +113,7 @@ class AutoHighlightable(Highlightable):
             inactive_obj.set_fill(opacity=self.inactive_fill_opacity)
         if self.inactive_stroke_opacity is not None:
             inactive_obj.set_stroke(opacity=self.inactive_stroke_opacity)
-        super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False)
+        super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False, group=group)
 
 
 class VGroupHighlight(VGroup):
@@ -134,6 +138,24 @@ class VGroupHighlight(VGroup):
         self.previously_active_idxs = []
         self.highlighted = 0
 
+        # Resolve groups
+        groups = [item.group for item in self.submobjects]
+
+        # If there is a None and aso something else
+        if (None in groups) and len(set(groups)) != 1:
+            raise ValueError("The groups must be specified for all or no bullets at all.")
+
+        self.group2items: Dict[int, T.Set[Highlightable]] = defaultdict(set)
+        for i, obj in enumerate(self.submobjects):
+            group = obj.group
+            if group is None:
+                group = i
+            self.group2items[group].add(obj)
+
+    @property
+    def ngroups(self) -> int:
+        return len(self.group2items)
+
     def highlight(self, indices: T.Union[int, T.Sequence[int]]) -> AnimationGroup:
         """Highlights the submobjects in the given indices in the scene.
 
@@ -154,12 +176,14 @@ class VGroupHighlight(VGroup):
         for to_highlight in indices:
             if to_highlight in self.previously_active_idxs:
                 continue
-            anims.append(self.submobjects[to_highlight].get_activation_anim())
+            anims.append(AnimationGroup(*(x.get_activation_anim() for x in self.group2items[to_highlight])))
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
                 if previously_active_idx not in indices:
-                    anims.append(self.submobjects[previously_active_idx].get_deactivation_anim())
+                    anims.append(
+                        AnimationGroup(*(x.get_deactivation_anim() for x in self.group2items[previously_active_idx]))
+                    )
 
         self.previously_active_idxs = indices
 
