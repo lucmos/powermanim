@@ -9,7 +9,7 @@ from powermanim.layouts.arrangedbullets import ArrangedBullets
 class BulletList(VGroup):
     def __init__(
         self,
-        *rows: T.Union[Tex, Text],
+        *rows: T.Union[MathBullet, Tex, Text],
         line_spacing: float = MED_LARGE_BUFF * 1.5,
         indent_buff: float = MED_LARGE_BUFF * 1.5,
         left_buff: float = MED_LARGE_BUFF * 2,
@@ -48,6 +48,7 @@ class BulletList(VGroup):
                     inactive_stroke_opacity=inactive_opacity,
                     scale_active=scale_active,
                     scale_about_edge=LEFT,
+                    group=x.group if isinstance(x, MathBullet) else None,
                 )
                 for x in self.arranged_list
             )
