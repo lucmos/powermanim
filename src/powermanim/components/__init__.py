@@ -3,15 +3,15 @@ from .directionalarrow import DirectionalArrow
 from .invariance import Invariance
 from .logo import PowerManim
 from .numberslider import NumberSlider
-from .vgrouphighlight import AutoHighlightable, Highlightable, VGroupHighlight
+from .vgroupactivable import Activable, AutoActivable, VGroupActivable
 
 __all__ = [
-    "AutoHighlightable",
+    "AutoActivable",
     "ChartBars",
     "DirectionalArrow",
-    "Highlightable",
+    "Activable",
     "Invariance",
     "NumberSlider",
     "PowerManim",
-    "VGroupHighlight",
+    "VGroupActivable",
 ]
