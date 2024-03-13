@@ -1,5 +1,4 @@
 import typing as T
-from collections import defaultdict
 
 from manim import *
 
@@ -133,23 +132,4 @@ class ArrangedBullets(VGroup):
         rows = [(row if isinstance(row, MathBullet) else Bullet(row)) for row in rows]
 
         self.arrage_rows((row for row in rows if row.autoplace))
-
-        groups = [row.group for row in rows]
-
-        # If there is a None and aso something else
-        if (None in groups) and len(set(groups)) != 1:
-            raise ValueError("The groups must be specified for all or no bullets at all.")
-
-        group2bullet = defaultdict(list)
-        for i, row in enumerate(rows):
-            group = row.group
-            if group is None:
-                group = i
-            group2bullet[group].append(row)
-
-        group_rows = []
-        for _, bullets in group2bullet.items():
-            group_rows.append(VGroup(*bullets))
-
-        super().__init__(*group_rows)
-        self.ngroups = len(self)
+        super().__init__(*rows)

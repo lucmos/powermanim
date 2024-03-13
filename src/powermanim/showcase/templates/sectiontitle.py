@@ -1,5 +1,5 @@
+from powermanim import SectionTitle
 from powermanim.showcase.showcasescene import ShowcaseScene
-from powermanim.templates.sectiontitle import SectionTitle
 
 
 class SectionTitleShowcase(ShowcaseScene):

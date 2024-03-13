@@ -1,6 +1,6 @@
 from manim import *
 
-from powermanim.components.invariance import Invariance
+from powermanim import Invariance
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 

@@ -1,6 +1,7 @@
 from manim import *
 
-from powermanim.components.vgrouphighlight import VGroupHighlight
+from powermanim import VGroupHighlight
+from powermanim.components.vgrouphighlight import AutoHighlightable
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 
@@ -23,7 +24,21 @@ class VGroupHighlightShowcase(ShowcaseScene):
             )
         ]
 
-        group = VGroupHighlight(*dots, anim_run_time=1, anim_lag_ratio=0.1)
+        group = VGroupHighlight(
+            *map(
+                lambda x: AutoHighlightable(
+                    x,
+                    active_fill_opacity=1,
+                    active_stroke_opacity=1,
+                    inactive_fill_opacity=0.3,
+                    inactive_stroke_opacity=0.3,
+                    scale_active=1.25,
+                    scale_about_edge=LEFT,
+                ),
+                dots,
+            ),
+            anim_lag_ratio=0.1
+        )
         self.add(group)
         self.play(group.highlight(0))
         self.play(group.highlight(1))
@@ -32,4 +47,11 @@ class VGroupHighlightShowcase(ShowcaseScene):
         self.play(group.highlight([]))
         self.play(group.highlight([2, 4]))
         self.play(group.highlight([]))
-        self.wait(0.5)
+        self.play(group.clear())
+        for _ in range(len(group)):
+            self.play(group.only_next(), run_time=0.5)
+        self.play(group.clear())
+        for _ in range(len(group)):
+            self.play(group.also_next(), run_time=0.5)
+
+        self.play(group.clear())
