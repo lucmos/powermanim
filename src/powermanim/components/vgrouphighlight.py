@@ -91,6 +91,7 @@ class AutoHighlightable(Highlightable):
             scale_active (float): The scale of the active VMobject.
             scale_about_point (np.ndarray): The point to scale about.
             scale_about_edge (np.ndarray): The edge to scale about.
+            group (int): The group to which the object belongs.
         """
         self.active_fill_opacity = active_fill_opacity
         self.active_stroke_opacity = active_stroke_opacity

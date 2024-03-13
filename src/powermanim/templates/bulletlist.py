@@ -29,6 +29,7 @@ class BulletList(VGroupHighlight):
             inactive_opacity: The opacity of the inactive items.
             active_opacity: The opacity of the active items.
             scale_active: The scale of the active items.
+            anim_lag_ratio: The animation lag ratio.
         """
         self.arranged_list = ArrangedBullets(
             *rows,
