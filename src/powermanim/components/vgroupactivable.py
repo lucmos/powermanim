@@ -4,7 +4,7 @@ from collections import defaultdict
 from manim import *
 
 
-class Highlightable(VGroup):
+class Activable(VGroup):
     def __init__(
         self,
         inactive_vmobject: VMobject,
@@ -67,7 +67,7 @@ class Highlightable(VGroup):
         return Transform(self.obj, target, run_time=self.deactivation_anim_run_time)
 
 
-class AutoHighlightable(Highlightable):
+class AutoActivable(Activable):
     def __init__(
         self,
         vmobject: VMobject,
@@ -80,7 +80,7 @@ class AutoHighlightable(Highlightable):
         scale_about_edge=LEFT,
         group: T.Optional[int] = None,
     ) -> None:
-        """Highlightable component that automatically creates the active and inactive VMobjects.
+        """Activable component that automatically creates the active and inactive VMobjects.
 
         Args:
             vmobject (VMobject): The object to activate or deactivate VMobject.
@@ -117,27 +117,27 @@ class AutoHighlightable(Highlightable):
         super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False, group=group)
 
 
-class VGroupHighlight(VGroup):
+class VGroupActivable(VGroup):
     def __init__(
         self,
         *args: VMobject,
         anim_lag_ratio: float = 0,
         **kwargs: VMobject,
     ) -> None:
-        """Group component that can highlight a subset of its submobjects.
+        """Group component that can activate a subset of its submobjects.
 
         Args:
             *args: Submobjects to be added to the VGroup.
             anim_lag_ratio (float): The lag ratio of the animation.
             **kwargs: Keyword arguments to be passed to the VGroup.
         """
-        args_highlightable = (AutoHighlightable(x) if not isinstance(x, Highlightable) else x for x in args)
-        super().__init__(*args_highlightable, **kwargs)
+        args_activable = (AutoActivable(x) if not isinstance(x, Activable) else x for x in args)
+        super().__init__(*args_activable, **kwargs)
 
         self.anim_lag_ratio = anim_lag_ratio
 
         self.previously_active_idxs = []
-        self.highlighted = 0
+        self.actived = 0
 
         # Resolve groups
         groups = [item.group for item in self.submobjects]
@@ -146,7 +146,7 @@ class VGroupHighlight(VGroup):
         if (None in groups) and len(set(groups)) != 1:
             raise ValueError("The groups must be specified for all or no bullets at all.")
 
-        self.group2items: Dict[int, T.Set[Highlightable]] = defaultdict(set)
+        self.group2items: Dict[int, T.Set[Activable]] = defaultdict(set)
         for i, obj in enumerate(self.submobjects):
             group = obj.group
             if group is None:
@@ -157,27 +157,27 @@ class VGroupHighlight(VGroup):
     def ngroups(self) -> int:
         return len(self.group2items)
 
-    def highlight(self, indices: T.Union[int, T.Sequence[int]]) -> AnimationGroup:
-        """Highlights the submobjects in the given indices in the scene.
+    def activate(self, indices: T.Union[int, T.Sequence[int]]) -> AnimationGroup:
+        """Activates the submobjects in the given indices in the scene.
 
         Args:
             scene:
                 The scene in which the animation is played.
 
             indices:
-                The indices to highlight. If a single integer is given, only that index is highlighted.
-                If a sequence of integers is given, all indices in the sequence are highlighted. The
-                previously highlighted indices are dehighlighted smoothly.
+                The indices to activate. If a single integer is given, only that index is activated.
+                If a sequence of integers is given, all indices in the sequence are activated. The
+                previously activated indices are deactivated smoothly.
         """
         anims = []
 
         if not isinstance(indices, T.Sequence):
             indices = [indices]
 
-        for to_highlight in indices:
-            if to_highlight in self.previously_active_idxs:
+        for to_activate in indices:
+            if to_activate in self.previously_active_idxs:
                 continue
-            anims.append(AnimationGroup(*(x.get_activation_anim() for x in self.group2items[to_highlight])))
+            anims.append(AnimationGroup(*(x.get_activation_anim() for x in self.group2items[to_activate])))
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
@@ -192,27 +192,27 @@ class VGroupHighlight(VGroup):
 
     def also_next(self) -> Animation:
         """Highlights also the next item in the VGroup."""
-        self.highlighted += 1
+        self.actived += 1
 
-        if self.highlighted > len(self):
-            raise StopIteration("No more elements to highlight.")
+        if self.actived > len(self):
+            raise StopIteration("No more elements to activate.")
 
-        return self.highlight(indices=list(range(self.highlighted)))
+        return self.activate(indices=list(range(self.actived)))
 
     def only_next(self) -> Animation:
         """Highlights only the next item in the VGroup."""
-        if self.highlighted > len(self):
-            raise StopIteration("No more elements to highlight.")
-        anims = self.highlight(indices=self.highlighted)
-        self.highlighted += 1
+        if self.actived > len(self):
+            raise StopIteration("No more elements to activate.")
+        anims = self.activate(indices=self.actived)
+        self.actived += 1
         return anims
 
     def clear(self) -> Animation:
         """Clears the VGroup hightlighting."""
-        anims = self.highlight(indices=[])
-        self.highlighted = 0
+        anims = self.activate(indices=[])
+        self.actived = 0
         return anims
 
     def all(self) -> Animation:
         """Highlights all the VGroup."""
-        return self.highlight(indices=list(range(len(self))))
+        return self.activate(indices=list(range(len(self))))

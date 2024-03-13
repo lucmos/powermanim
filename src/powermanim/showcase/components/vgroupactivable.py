@@ -1,13 +1,13 @@
 from manim import *
 
-from powermanim import VGroupHighlight
-from powermanim.components.vgrouphighlight import AutoHighlightable
+from powermanim import VGroupActivable
+from powermanim.components.vgroupactivable import AutoActivable
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 
-class VGroupHighlightShowcase(ShowcaseScene):
+class VGroupActivableShowcase(ShowcaseScene):
     def showcasing():
-        return VGroupHighlight
+        return VGroupActivable
 
     def construct(self):
         dots = [
@@ -24,9 +24,9 @@ class VGroupHighlightShowcase(ShowcaseScene):
             )
         ]
 
-        group = VGroupHighlight(
+        group = VGroupActivable(
             *map(
-                lambda x: AutoHighlightable(
+                lambda x: AutoActivable(
                     x,
                     active_fill_opacity=1,
                     active_stroke_opacity=1,
@@ -40,13 +40,13 @@ class VGroupHighlightShowcase(ShowcaseScene):
             anim_lag_ratio=0.1
         )
         self.add(group)
-        self.play(group.highlight(0))
-        self.play(group.highlight(1))
-        self.play(group.highlight([2, 3]))
-        self.play(group.highlight([1, 3]))
-        self.play(group.highlight([]))
-        self.play(group.highlight([2, 4]))
-        self.play(group.highlight([]))
+        self.play(group.activate(0))
+        self.play(group.activate(1))
+        self.play(group.activate([2, 3]))
+        self.play(group.activate([1, 3]))
+        self.play(group.activate([]))
+        self.play(group.activate([2, 4]))
+        self.play(group.activate([]))
         self.play(group.clear())
         for _ in range(len(group)):
             self.play(group.only_next(), run_time=0.5)
