@@ -1,10 +1,11 @@
+import abc
 import typing as T
 from collections import defaultdict
 
 from manim import *
 
 
-class Activable(VGroup):
+class ActivableMobject(Group):
     def __init__(
         self,
         inactive_vmobject: VMobject,
@@ -14,11 +15,10 @@ class Activable(VGroup):
         deactivation_anim_run_time: float = 1.0,
         group: T.Optional[int] = None,
     ) -> None:
-        self.active_stroke_opacities = [x.stroke_opacity for x in active_vmobject.get_family()]
-        self.active_fill_opacities = [x.fill_opacity for x in active_vmobject.get_family()]
-        self.inactive_stroke_opacities = [x.stroke_opacity for x in inactive_vmobject.get_family()]
-        self.inactive_fill_opacities = [x.fill_opacity for x in inactive_vmobject.get_family()]
-
+        self.is_active = start_active
+        self.activation_anim_run_time = activation_anim_run_time
+        self.deactivation_anim_run_time = deactivation_anim_run_time
+        self.group = group
         super().__init__(
             active_vmobject.copy() if start_active else inactive_vmobject.copy(),
             active_vmobject.set_opacity(0),
@@ -34,14 +34,55 @@ class Activable(VGroup):
         self.group = group
 
     @property
-    def obj(self) -> VMobject:
+    def obj(self) -> Mobject:
         return self[0]
 
-    def get_activation_anim(self) -> Animation:
+    @abc.abstractmethod
+    def _get_activation_anim(self):
+        raise NotImplementedError
+
+    def activate(self) -> Animation:
         if self.is_active:
             raise ValueError("The object is already active.")
         self.is_active = True
+        return self._get_activation_anim()
 
+    @abc.abstractmethod
+    def _get_deactivation_anim(self):
+        raise NotImplementedError
+
+    def deactivate(self) -> Animation:
+        if not self.is_active:
+            raise ValueError("The object is already inactive.")
+        self.is_active = False
+        return self._get_deactivation_anim()
+
+
+class VActivable(ActivableMobject):
+    def __init__(
+        self,
+        inactive_vmobject: VMobject,
+        active_vmobject: VMobject,
+        start_active: bool = False,
+        activation_anim_run_time: float = 1.0,
+        deactivation_anim_run_time: float = 1.0,
+        group: T.Optional[int] = None,
+    ) -> None:
+        self.active_stroke_opacities = [x.stroke_opacity for x in active_vmobject.get_family()]
+        self.active_fill_opacities = [x.fill_opacity for x in active_vmobject.get_family()]
+        self.inactive_stroke_opacities = [x.stroke_opacity for x in inactive_vmobject.get_family()]
+        self.inactive_fill_opacities = [x.fill_opacity for x in inactive_vmobject.get_family()]
+
+        super().__init__(
+            inactive_vmobject=inactive_vmobject,
+            active_vmobject=active_vmobject,
+            start_active=start_active,
+            activation_anim_run_time=activation_anim_run_time,
+            deactivation_anim_run_time=deactivation_anim_run_time,
+            group=group,
+        )
+
+    def _get_activation_anim(self) -> Animation:
         target = self.active_vmobject.copy()
         for subobj, stroke_opacity, fill_opacity in zip(
             target.get_family(), self.active_stroke_opacities, self.active_fill_opacities
@@ -51,11 +92,7 @@ class Activable(VGroup):
             subobj.set_stroke(opacity=stroke_opacity, family=False, background=True)
         return Transform(self.obj, target, run_time=self.activation_anim_run_time)
 
-    def get_deactivation_anim(self) -> Animation:
-        if not self.is_active:
-            raise ValueError("The object is already inactive.")
-        self.is_active = False
-
+    def _get_deactivation_anim(self) -> Animation:
         target = self.inactive_vmobject.copy()
         for subobj, stroke_opacity, fill_opacity in zip(
             target.get_family(), self.inactive_stroke_opacities, self.inactive_fill_opacities
@@ -67,7 +104,7 @@ class Activable(VGroup):
         return Transform(self.obj, target, run_time=self.deactivation_anim_run_time)
 
 
-class AutoActivable(Activable):
+class VAutoActivable(VActivable):
     def __init__(
         self,
         vmobject: VMobject,
@@ -117,7 +154,7 @@ class AutoActivable(Activable):
         super().__init__(inactive_vmobject=inactive_obj, active_vmobject=active_obj, start_active=False, group=group)
 
 
-class VGroupActivable(VGroup):
+class GroupActivable(Group):
     def __init__(
         self,
         *args: VMobject,
@@ -131,7 +168,14 @@ class VGroupActivable(VGroup):
             anim_lag_ratio (float): The lag ratio of the animation.
             **kwargs: Keyword arguments to be passed to the VGroup.
         """
-        args_activable = (AutoActivable(x) if not isinstance(x, Activable) else x for x in args)
+        args_activable = (
+            (
+                (VAutoActivable(x) if isinstance(x, VMobject) else VAutoActivable(x))
+                if not isinstance(x, VActivable)
+                else x
+            )
+            for x in args
+        )
         super().__init__(*args_activable, **kwargs)
 
         self.anim_lag_ratio = anim_lag_ratio
@@ -146,7 +190,7 @@ class VGroupActivable(VGroup):
         if (None in groups) and len(set(groups)) != 1:
             raise ValueError("The groups must be specified for all or no bullets at all.")
 
-        self.group2items: Dict[int, T.Set[Activable]] = defaultdict(set)
+        self.group2items: Dict[int, T.Set[VActivable]] = defaultdict(set)
         for i, obj in enumerate(self.submobjects):
             group = obj.group
             if group is None:
@@ -177,14 +221,12 @@ class VGroupActivable(VGroup):
         for to_activate in indices:
             if to_activate in self.previously_active_idxs:
                 continue
-            anims.append(AnimationGroup(*(x.get_activation_anim() for x in self.group2items[to_activate])))
+            anims.append(AnimationGroup(*(x.activate() for x in self.group2items[to_activate])))
 
         if self.previously_active_idxs:
             for previously_active_idx in self.previously_active_idxs:
                 if previously_active_idx not in indices:
-                    anims.append(
-                        AnimationGroup(*(x.get_deactivation_anim() for x in self.group2items[previously_active_idx]))
-                    )
+                    anims.append(AnimationGroup(*(x.deactivate() for x in self.group2items[previously_active_idx])))
 
         self.previously_active_idxs = indices
 
