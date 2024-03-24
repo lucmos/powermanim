@@ -2,6 +2,7 @@ from .components import (
     ChartBars,
     DirectionalArrow,
     GroupActivable,
+    ImageAutoActivable,
     Invariance,
     NumberSlider,
     PowerManim,
@@ -12,6 +13,7 @@ from .layouts import ArrangedBullets, Bullet, MathBullet, SwitchPalette
 from .templates import BulletList, Reference, SectionTitle
 
 __all__ = [
+    "ImageAutoActivable",
     "VAutoActivable",
     "ChartBars",
     "DirectionalArrow",
