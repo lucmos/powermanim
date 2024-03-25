@@ -58,62 +58,6 @@ class ActivableMobject(Group):
         return self._get_deactivation_anim()
 
 
-class ImageAutoActivable(ActivableMobject):
-    def __init__(
-        self,
-        vmobject: Mobject,
-        active_opacity: T.Optional[float] = 1.0,
-        inactive_opacity: T.Optional[float] = 0.35,
-        scale_active: T.Optional[float] = 1.1,
-        scale_about_point=None,
-        scale_about_edge=ORIGIN,
-        activation_anim_run_time: float = 1.0,
-        deactivation_anim_run_time: float = 1.0,
-        group: T.Optional[int] = None,
-    ) -> None:
-        """Activable component that automatically creates the active and inactive Mobjects.
-
-        Args:
-            vmobject (Mobject): The object to activate or deactivate Mobject.
-            active_opacity (float): The fill opacity of the active Mobject.
-            inactive_opacity (float): The fill opacity of the inactive Mobject.
-            scale_active (float): The scale of the active Mobject.
-            scale_about_point (np.ndarray): The point to scale about.
-            scale_about_edge (np.ndarray): The edge to scale about.
-            group (int): The group to which the object belongs.
-        """
-        self.active_opacity = active_opacity
-        self.inactive_opacity = inactive_opacity
-        self.scale_active = scale_active
-        self.scale_about_point = scale_about_point
-        self.scale_about_edge = scale_about_edge
-
-        active_obj = vmobject.copy()
-        if self.scale_active is not None:
-            active_obj.scale(self.scale_active, about_point=self.scale_about_point, about_edge=self.scale_about_edge)
-        if self.active_opacity is not None:
-            active_obj.set_opacity(self.active_opacity)
-
-        inactive_obj = vmobject.copy()
-        if self.inactive_opacity is not None:
-            inactive_obj.set_opacity(self.inactive_opacity)
-
-        super().__init__(
-            inactive_vmobject=inactive_obj,
-            active_vmobject=active_obj,
-            start_active=False,
-            activation_anim_run_time=activation_anim_run_time,
-            deactivation_anim_run_time=deactivation_anim_run_time,
-            group=group,
-        )
-
-    def _get_activation_anim(self) -> Animation:
-        return self.obj.animate.set_opacity(self.active_opacity)
-
-    def _get_deactivation_anim(self) -> Animation:
-        return self.obj.animate.set_opacity(self.inactive_opacity)
-
-
 class VActivable(ActivableMobject):
     def __init__(
         self,
@@ -217,6 +161,62 @@ class VAutoActivable(VActivable):
             activation_anim_run_time=activation_anim_run_time,
             deactivation_anim_run_time=deactivation_anim_run_time,
         )
+
+
+class ImageAutoActivable(ActivableMobject):
+    def __init__(
+        self,
+        vmobject: Mobject,
+        active_opacity: T.Optional[float] = 1.0,
+        inactive_opacity: T.Optional[float] = 0.35,
+        scale_active: T.Optional[float] = 1.1,
+        scale_about_point=None,
+        scale_about_edge=ORIGIN,
+        activation_anim_run_time: float = 1.0,
+        deactivation_anim_run_time: float = 1.0,
+        group: T.Optional[int] = None,
+    ) -> None:
+        """Activable component that automatically creates the active and inactive Mobjects.
+
+        Args:
+            vmobject (Mobject): The object to activate or deactivate Mobject.
+            active_opacity (float): The fill opacity of the active Mobject.
+            inactive_opacity (float): The fill opacity of the inactive Mobject.
+            scale_active (float): The scale of the active Mobject.
+            scale_about_point (np.ndarray): The point to scale about.
+            scale_about_edge (np.ndarray): The edge to scale about.
+            group (int): The group to which the object belongs.
+        """
+        self.active_opacity = active_opacity
+        self.inactive_opacity = inactive_opacity
+        self.scale_active = scale_active
+        self.scale_about_point = scale_about_point
+        self.scale_about_edge = scale_about_edge
+
+        active_obj = vmobject.copy()
+        if self.scale_active is not None:
+            active_obj.scale(self.scale_active, about_point=self.scale_about_point, about_edge=self.scale_about_edge)
+        if self.active_opacity is not None:
+            active_obj.set_opacity(self.active_opacity)
+
+        inactive_obj = vmobject.copy()
+        if self.inactive_opacity is not None:
+            inactive_obj.set_opacity(self.inactive_opacity)
+
+        super().__init__(
+            inactive_vmobject=inactive_obj,
+            active_vmobject=active_obj,
+            start_active=False,
+            activation_anim_run_time=activation_anim_run_time,
+            deactivation_anim_run_time=deactivation_anim_run_time,
+            group=group,
+        )
+
+    def _get_activation_anim(self) -> Animation:
+        return self.obj.animate.set_opacity(self.active_opacity)
+
+    def _get_deactivation_anim(self) -> Animation:
+        return self.obj.animate.set_opacity(self.inactive_opacity)
 
 
 class GroupActivable(Group):
