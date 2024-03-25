@@ -130,6 +130,8 @@ class VAutoActivable(VActivable):
             scale_active (float): The scale of the active VMobject.
             scale_about_point (np.ndarray): The point to scale about.
             scale_about_edge (np.ndarray): The edge to scale about.
+            activation_anim_run_time (float): The run time of the activation animation.
+            deactivation_anim_run_time (float): The run time of the deactivation animation.
             group (int): The group to which the object belongs.
         """
         self.active_fill_opacity = active_fill_opacity
@@ -185,6 +187,8 @@ class ImageAutoActivable(ActivableMobject):
             scale_active (float): The scale of the active Mobject.
             scale_about_point (np.ndarray): The point to scale about.
             scale_about_edge (np.ndarray): The edge to scale about.
+            activation_anim_run_time (float): The run time of the activation animation.
+            deactivation_anim_run_time (float): The run time of the deactivation animation.
             group (int): The group to which the object belongs.
         """
         self.active_opacity = active_opacity
