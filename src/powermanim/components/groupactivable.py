@@ -255,7 +255,7 @@ class GroupActivable(Group):
         if (None in groups) and len(set(groups)) != 1:
             raise ValueError("The groups must be specified for all or no bullets at all.")
 
-        self.group2items: Dict[int, T.Set[VActivable]] = defaultdict(set)
+        self.group2items: Dict[int, T.Set[ActivableMobject]] = defaultdict(set)
         for i, obj in enumerate(self.submobjects):
             group = obj.group
             if group is None:
