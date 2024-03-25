@@ -6,6 +6,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class ChartBarsShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return ChartBars
 

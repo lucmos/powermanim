@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class InvarianceShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return Invariance
 

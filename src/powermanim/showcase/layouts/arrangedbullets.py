@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class ArrangedBulletsShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return ArrangedBullets
 
