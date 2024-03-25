@@ -1,7 +1,7 @@
 from manim import *
 
 from powermanim import GroupActivable
-from powermanim.components.vgroupactivable import VAutoActivable
+from powermanim.components.groupactivable import VAutoActivable
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 
