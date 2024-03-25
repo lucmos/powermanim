@@ -1,14 +1,14 @@
 from manim import *
 
-from powermanim import VGroupActivable
-from powermanim.components.vgroupactivable import AutoActivable
+from powermanim import GroupActivable
+from powermanim.components.groupactivable import VAutoActivable
 from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class VGroupActivableShowcase(ShowcaseScene):
     @staticmethod
     def showcasing():
-        return VGroupActivable
+        return GroupActivable
 
     def construct(self):
         dots = [
@@ -25,9 +25,9 @@ class VGroupActivableShowcase(ShowcaseScene):
             )
         ]
 
-        group = VGroupActivable(
+        group = GroupActivable(
             *map(
-                lambda x: AutoActivable(
+                lambda x: VAutoActivable(
                     x,
                     active_fill_opacity=1,
                     active_stroke_opacity=1,

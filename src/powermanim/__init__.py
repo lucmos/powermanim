@@ -1,25 +1,27 @@
 from .components import (
-    Activable,
-    AutoActivable,
     ChartBars,
     DirectionalArrow,
+    GroupActivable,
+    ImageAutoActivable,
     Invariance,
     NumberSlider,
     PowerManim,
-    VGroupActivable,
+    VActivable,
+    VAutoActivable,
 )
 from .layouts import ArrangedBullets, Bullet, MathBullet, SwitchPalette
 from .templates import BulletList, Reference, SectionTitle
 
 __all__ = [
-    "AutoActivable",
+    "ImageAutoActivable",
+    "VAutoActivable",
     "ChartBars",
     "DirectionalArrow",
-    "Activable",
+    "VActivable",
     "Invariance",
     "NumberSlider",
     "PowerManim",
-    "VGroupActivable",
+    "GroupActivable",
     "ArrangedBullets",
     "SwitchPalette",
     "Bullet",

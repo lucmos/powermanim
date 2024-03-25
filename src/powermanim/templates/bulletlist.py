@@ -2,10 +2,10 @@ import typing as T
 
 from manim import *
 
-from powermanim import ArrangedBullets, AutoActivable, MathBullet, VGroupActivable
+from powermanim import ArrangedBullets, GroupActivable, MathBullet, VAutoActivable
 
 
-class BulletList(VGroupActivable):
+class BulletList(GroupActivable):
     def __init__(
         self,
         *rows: T.Union[MathBullet, Tex, Text],
@@ -41,7 +41,7 @@ class BulletList(VGroupActivable):
 
         super().__init__(
             *(
-                AutoActivable(
+                VAutoActivable(
                     x,
                     active_fill_opacity=active_opacity,
                     active_stroke_opacity=active_opacity,

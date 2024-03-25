@@ -1,17 +1,18 @@
 from .chartbars import ChartBars
 from .directionalarrow import DirectionalArrow
+from .groupactivable import GroupActivable, ImageAutoActivable, VActivable, VAutoActivable
 from .invariance import Invariance
 from .logo import PowerManim
 from .numberslider import NumberSlider
-from .vgroupactivable import Activable, AutoActivable, VGroupActivable
 
 __all__ = [
-    "AutoActivable",
+    "ImageAutoActivable",
+    "VAutoActivable",
     "ChartBars",
     "DirectionalArrow",
-    "Activable",
+    "VActivable",
     "Invariance",
     "NumberSlider",
     "PowerManim",
-    "VGroupActivable",
+    "GroupActivable",
 ]
