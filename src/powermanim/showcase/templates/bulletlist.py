@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class BulletListShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return BulletList
 

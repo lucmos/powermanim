@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class DirectionalArrowShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return DirectionalArrow
 

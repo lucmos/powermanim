@@ -6,6 +6,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class VGroupActivableShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return VGroupActivable
 

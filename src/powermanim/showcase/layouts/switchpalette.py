@@ -117,6 +117,7 @@ class SwitchPaletteShowcase(ShowcaseScene):
     https://github.com/ManimCommunity/manim/blob/main/manim/utils/color/manim_colors.py
     """
 
+    @staticmethod
     def showcasing():
         return SwitchPalette
 

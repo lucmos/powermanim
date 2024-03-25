@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class ReferenceShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return Reference
 

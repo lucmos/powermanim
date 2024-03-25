@@ -5,6 +5,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class NumberSliderShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return NumberSlider
 

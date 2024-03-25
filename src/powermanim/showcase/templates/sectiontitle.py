@@ -3,6 +3,7 @@ from powermanim.showcase.showcasescene import ShowcaseScene
 
 
 class SectionTitleShowcase(ShowcaseScene):
+    @staticmethod
     def showcasing():
         return SectionTitle
 
