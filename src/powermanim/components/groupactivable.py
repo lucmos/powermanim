@@ -111,7 +111,7 @@ class ImageAutoActivable(ActivableMobject):
         return self.obj.animate.set_opacity(self.active_opacity)
 
     def _get_deactivation_anim(self) -> Animation:
-        return self.obj.animate.set_opacity(self.active_opacity)
+        return self.obj.animate.set_opacity(self.inactive_opacity)
 
 
 class VActivable(ActivableMobject):
