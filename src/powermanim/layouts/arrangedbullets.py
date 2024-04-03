@@ -9,7 +9,7 @@ class MathBullet(MathTex):
         *text: str,
         level: int = 0,
         group: T.Optional[int] = None,
-        adjustment: float = 0.0,
+        adjustment: T.Optional[T.Union[float, T.Sequence[float]]] = 0.0,
         symbol: T.Optional[str] = r"\bullet",
         autoplace: bool = True,
         **kwargs,
@@ -52,7 +52,7 @@ class MathBullet(MathTex):
         """
         self.shift(LEFT * indent_buff * self.intend_level)
 
-    def adjust(self, adjustment: T.Optional[float] = None):
+    def adjust(self, adjustment: T.Optional[T.Union[float, T.Sequence[float]]] = None):
         """Adjust the bullet point.
 
         Args:
@@ -69,7 +69,7 @@ class Bullet(MathBullet):
         *text: str,
         level: int = 0,
         group: T.Optional[int] = None,
-        adjustment: float = 0.0,
+        adjustment: T.Optional[T.Union[float, T.Sequence[float]]] = 0.0,
         symbol: T.Optional[str] = r"$\bullet$",
         force_inline: bool = False,
         arg_separator="",
@@ -95,41 +95,61 @@ class Bullet(MathBullet):
 
 
 class ArrangedBullets(VGroup):
-    def arrage_rows(self, rows: T.Iterable[T.Union[MathBullet, Bullet, MathTex, Tex, Text]]):
-        bullet_rows: T.Iterable[MathBullet] = (
-            VGroup(*rows)
-            .arrange(DOWN, aligned_edge=LEFT, buff=self.line_spacing)
-            .to_edge(LEFT, buff=self.left_buff)
-            .shift(self.global_shift)
-        )
+    def arrange_rows(self, rows: T.Iterable[MathBullet]):
+        reference_row, *remaining_rows = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0)
 
-        for row in bullet_rows:
+        remaining_rows: T.Sequence[MathBullet]
+        for bullet in remaining_rows:
+            current_spacing = self.line_spacing * (self.line_spacing_decay**bullet.level)
+
+            current_center = bullet.get_center()
+            current_up = bullet.get_critical_point(UP)
+            reference_down = reference_row.get_critical_point(DOWN)
+
+            bullet.move_to(
+                np.asarray(
+                    [
+                        # Start from the bottom of the previous line
+                        # Add the decayed line spacing, depending on the bullet level
+                        # Add half the object height, to account for multilines
+                        current_center[0],
+                        reference_down[1] - current_spacing - abs(current_center[1] - current_up[1]),
+                        current_center[2],
+                    ]
+                )
+            )
+            reference_row = bullet
+
+        for row in rows:
             row.indent(indent_buff=self.indent_buff)
             row.adjust()
 
     def __init__(
         self,
-        *rows: T.Union[MathBullet, Bullet, MathTex, Tex, Text],
+        *rows: T.Union[MathBullet, Bullet, MathTex, Tex, Text, str],
         line_spacing: float = MED_LARGE_BUFF * 1.5,
+        line_spacing_decay: float = 1.0,
         indent_buff: float = MED_LARGE_BUFF * 1.5,
-        left_buff: float = MED_LARGE_BUFF * 1.5,
-        global_shift: float = 0.0,
-    ):
+        left_buff: float = MED_LARGE_BUFF * 2,
+    ):  # TODO: remove argument defaults in next version?
         """A VGroup that arranges the rows in a list of bullet points.
 
         Args:
             rows: A list of items to be displayed.
             line_spacing: The spacing between the rows.
+            line_spacing_decay: The rate at which the spacing decays at each level
             indent_buff: The spacing between the bullet and the text.
-            left_buff: The spacing between the left edge of the rows and the left edge of the screen.
-            global_shift: The global_shift of the rows.
+            left_buff: The buff from the left edge
         """
         self.line_spacing = line_spacing
+        self.line_spacing_decay = line_spacing_decay
         self.indent_buff = indent_buff
         self.left_buff = left_buff
-        self.global_shift = global_shift
 
-        rows = [(row if isinstance(row, MathBullet) else Bullet(row)) for row in rows]
+        rows: T.Sequence[T.Union[MathBullet, Bullet, MathTex, Tex, Text]] = [
+            (Bullet(row) if isinstance(row, str) else row) for row in rows
+        ]
 
-        self.arrage_rows((row for row in rows if row.autoplace))
+        self.arrange_rows([row for row in rows if row.autoplace])
         super().__init__(*rows)
+        self.move_to(ORIGIN).to_edge(LEFT, self.left_buff)

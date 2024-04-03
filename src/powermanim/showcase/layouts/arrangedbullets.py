@@ -21,8 +21,7 @@ class ArrangedBulletsShowcase(ShowcaseScene):
         g_rows = VGroup(*rows).set_opacity(0.25).scale(0.9)
         g_rows.target = ArrangedBullets(
             *g_rows.copy(),
-            line_spacing=MED_LARGE_BUFF * 1.25,
-            left_buff=MED_LARGE_BUFF * 3,
+            line_spacing_decay=0.65,
         ).set_opacity(1)
 
         self.play(
