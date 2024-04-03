@@ -96,15 +96,11 @@ class Bullet(MathBullet):
 
 class ArrangedBullets(VGroup):
     def arrange_rows(self, rows: T.Iterable[MathBullet]):
-        reference_row, *remaining_rows = VGroup(*rows).arrange(
-            DOWN, aligned_edge=LEFT, buff=0
-        )
+        reference_row, *remaining_rows = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0)
 
         remaining_rows: T.Sequence[MathBullet]
         for bullet in remaining_rows:
-            current_spacing = self.line_spacing * (
-                self.line_spacing_decay**bullet.level
-            )
+            current_spacing = self.line_spacing * (self.line_spacing_decay**bullet.level)
 
             current_center = bullet.get_center()
             current_up = bullet.get_critical_point(UP)
@@ -117,9 +113,7 @@ class ArrangedBullets(VGroup):
                         # Add the decayed line spacing, depending on the bullet level
                         # Add half the object height, to account for multilines
                         current_center[0],
-                        reference_down[1]
-                        - current_spacing
-                        - abs(current_center[1] - current_up[1]),
+                        reference_down[1] - current_spacing - abs(current_center[1] - current_up[1]),
                         current_center[2],
                     ]
                 )
