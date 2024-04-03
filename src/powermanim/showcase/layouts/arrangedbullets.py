@@ -22,8 +22,7 @@ class ArrangedBulletsShowcase(ShowcaseScene):
         g_rows.target = (
             ArrangedBullets(
                 *g_rows.copy(),
-                line_spacing=MED_LARGE_BUFF * 1.25,
-                line_spacing_decay=0.5,
+                line_spacing_decay=0.65,
             )
             .to_edge(LEFT, buff=MED_LARGE_BUFF * 3)
             .set_opacity(1)

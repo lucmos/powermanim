@@ -136,7 +136,8 @@ class ArrangedBullets(VGroup):
         line_spacing: float = MED_LARGE_BUFF * 1.5,
         line_spacing_decay: float = 1.0,
         indent_buff: float = MED_LARGE_BUFF * 1.5,
-    ):  # TODO: remove argument defaults in next version
+        left_buff: float = MED_LARGE_BUFF * 2,
+    ):  # TODO: remove argument defaults in next version?
         """A VGroup that arranges the rows in a list of bullet points.
 
         Args:
@@ -144,10 +145,12 @@ class ArrangedBullets(VGroup):
             line_spacing: The spacing between the rows.
             line_spacing_decay: The rate at which the spacing decays at each level
             indent_buff: The spacing between the bullet and the text.
+            left_buff: The buff from the left edge
         """
         self.line_spacing = line_spacing
         self.line_spacing_decay = line_spacing_decay
         self.indent_buff = indent_buff
+        self.left_buff = left_buff
 
         rows: T.Sequence[T.Union[MathBullet, Bullet, MathTex, Tex, Text]] = [
             (Bullet(row) if isinstance(row, str) else row) for row in rows
@@ -155,3 +158,4 @@ class ArrangedBullets(VGroup):
 
         self.arrange_rows([row for row in rows if row.autoplace])
         super().__init__(*rows)
+        self.move_to(ORIGIN).to_edge(LEFT, self.left_buff)

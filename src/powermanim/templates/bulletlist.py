@@ -10,12 +10,13 @@ class BulletList(GroupActivable):
         self,
         *rows: T.Union[MathBullet, Tex, Text],
         line_spacing: float = MED_LARGE_BUFF * 1.5,
-        line_spacing_decay: float = 1.0,  # TODO: in the next version, change default to 0.5
+        line_spacing_decay: float = 1.0,  # TODO: in the next version, change default to 0.65
         indent_buff: float = MED_LARGE_BUFF * 1.5,
         inactive_opacity: float = 0.5,
         active_opacity: float = 1.0,
-        scale_active: float = 1.0,
+        scale_active: float = 1.0,  # TODO: in the next version, change default to 1.2
         anim_lag_ratio: float = 0,
+        left_buff: float = MED_LARGE_BUFF * 2,
     ):
         """A class to represent an highlatable list of items.
 
@@ -28,16 +29,14 @@ class BulletList(GroupActivable):
             active_opacity: The opacity of the active items.
             scale_active: The scale of the active items.
             anim_lag_ratio: The animation lag ratio.
+            left_buff: The buff from the left edge
         """
-        self.arranged_list = (
-            ArrangedBullets(
-                *rows,
-                line_spacing=line_spacing,
-                line_spacing_decay=line_spacing_decay,
-                indent_buff=indent_buff,
-            )
-            .move_to(ORIGIN)
-            .to_edge(LEFT, MED_LARGE_BUFF * 2)
+        self.arranged_list = ArrangedBullets(
+            *rows,
+            line_spacing=line_spacing,
+            line_spacing_decay=line_spacing_decay,
+            indent_buff=indent_buff,
+            left_buff=left_buff,
         )
 
         super().__init__(

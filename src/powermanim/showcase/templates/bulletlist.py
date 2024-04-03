@@ -23,7 +23,7 @@ class BulletListShowcase(ShowcaseScene):
         bullets = BulletList(
             *rows,
             scale_active=1.2,
-            line_spacing_decay=0.5,
+            line_spacing_decay=0.65,
         )
         self.add(bullets)
 
