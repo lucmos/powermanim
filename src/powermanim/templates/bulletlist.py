@@ -29,12 +29,16 @@ class BulletList(GroupActivable):
             scale_active: The scale of the active items.
             anim_lag_ratio: The animation lag ratio.
         """
-        self.arranged_list = ArrangedBullets(
-            *rows,
-            line_spacing=line_spacing,
-            line_spacing_decay=line_spacing_decay,
-            indent_buff=indent_buff,
-        ).to_edge(LEFT, MED_LARGE_BUFF * 2)
+        self.arranged_list = (
+            ArrangedBullets(
+                *rows,
+                line_spacing=line_spacing,
+                line_spacing_decay=line_spacing_decay,
+                indent_buff=indent_buff,
+            )
+            .move_to(ORIGIN)
+            .to_edge(LEFT, MED_LARGE_BUFF * 2)
+        )
 
         super().__init__(
             *(
