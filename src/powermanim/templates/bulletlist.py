@@ -34,7 +34,7 @@ class BulletList(GroupActivable):
             line_spacing=line_spacing,
             line_spacing_decay=line_spacing_decay,
             indent_buff=indent_buff,
-        )
+        ).to_edge(LEFT, MED_LARGE_BUFF * 2)
 
         super().__init__(
             *(

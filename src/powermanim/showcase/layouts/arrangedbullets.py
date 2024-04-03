@@ -19,11 +19,15 @@ class ArrangedBulletsShowcase(ShowcaseScene):
             Bullet("Third element", level=1, symbol="(3)"),
         ]
         g_rows = VGroup(*rows).set_opacity(0.25).scale(0.9)
-        g_rows.target = ArrangedBullets(
-            *g_rows.copy(),
-            line_spacing=MED_LARGE_BUFF * 1.25,
-            left_buff=MED_LARGE_BUFF * 3,
-        ).set_opacity(1)
+        g_rows.target = (
+            ArrangedBullets(
+                *g_rows.copy(),
+                line_spacing=MED_LARGE_BUFF * 1.25,
+                line_spacing_decay=0.5,
+            )
+            .to_edge(LEFT, buff=MED_LARGE_BUFF * 3)
+            .set_opacity(1)
+        )
 
         self.play(
             MoveToTarget(g_rows),
